@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders, HttpEvent} from "@angular/common/http";
-import { User } from '../interfaces/userInt';
+import { Business } from '../interfaces/Business';
 import { catchError,throwError} from 'rxjs';
-import { JwtHelperService } from "@auth0/angular-jwt";
+import { JwtHelperService } from "node_modules/@auth0/angular-jwt";
 import { DatePipe } from '@angular/common';
 
 @Injectable({
@@ -12,17 +12,18 @@ export class AuthService {
   constructor(public http:HttpClient,public dp:DatePipe) { }
   UserValidated = false;
   helper = new JwtHelperService();
-  domain = "http://localhost:3000";
+  //domain = "https://nail-appointment-backend-production.up.railway.app";
+  domain = "http://localhost:8080";
   isLoggedIn = false;
   options:any;
   authToken:any;
-     register(user:User) {
-          return this.http.post<User>(this.domain+ '/authentication/register',user).pipe(  
+     register(BusinessOwner:Business) {
+          return this.http.post<Business>(this.domain+ '/auth/register',BusinessOwner).pipe(  
             catchError(this.handleError)
           )
     }
-     login(user:User) {
-          return this.http.post<User>(this.domain+ '/authentication/login',user).pipe(  
+     login(BusinessOwner:Business) {
+          return this.http.post<Business>(this.domain+ '/auth/login',BusinessOwner).pipe(  
             catchError(this.handleError)
           )
     }
@@ -42,8 +43,8 @@ export class AuthService {
       this.authToken = localStorage.getItem('Token_id');
 
     }
-    StoreToken(user:User){
-       localStorage.setItem('Token_id',JSON.stringify(user).slice(1, -1));
+    StoreToken(BusinessOwner:Business){
+       localStorage.setItem('Token_id',JSON.stringify(BusinessOwner).slice(1, -1));
     }
     Logout(){
         localStorage.clear();

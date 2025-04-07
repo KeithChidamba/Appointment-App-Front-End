@@ -1,8 +1,8 @@
 import { Component,Injectable } from '@angular/core';
-import { Validators,FormBuilder } from "@angular/forms";
-import { User } from "../interfaces/userInt";
+import { Validators,FormBuilder } from "node_modules/@angular/forms";
+import { Business } from "../interfaces/Business";
 import { AuthService } from "../services/auth.service";
-import { Router } from '@angular/router';
+import { Router } from 'node_modules/@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -18,40 +18,64 @@ export class RegisterComponent {
   checkingValidity =false;
   err = false;
   success = false;
-  user:User={
-    email: '',
-    password:'',
-    username: ''
+  BusinessOwner:Business={
+    OwnerEmail: ' ',
+    OwnerPassword:'',
+    BusinessName: '',
+    BusinessID:'',
+    OwnerFirstName:'',
+    OwnerLastName:'',
+    OwnerPhone:''
   };
     SignUpform = this.fb.group({
-      username : ['', Validators.compose([
+      BusinessName : ['', Validators.compose([
         Validators.minLength(4),
-        Validators.maxLength(15),
+        Validators.maxLength(30),
         Validators.required,
         Validators.pattern(/^[a-zA-Z0-9]+$/)
       ])],
-      email : ['', Validators.compose([
+      OwnerEmail : ['', Validators.compose([
         Validators.minLength(5),
         Validators.maxLength(30),
         Validators.required,
         Validators.email
       ])],
-      password : ['', Validators.compose([
+      OwnerPassword : ['', Validators.compose([
         Validators.minLength(8),
         Validators.pattern(/^[a-zA-Z0-9]+$/),
         Validators.maxLength(30),
         Validators.required
+      ])],
+      OwnerPhone : ['', Validators.compose([
+        Validators.required,
+        Validators.pattern('^[0-9]{10}$') 
+      ])],
+      OwnerFirstName : ['', Validators.compose([
+        Validators.minLength(4),
+        Validators.maxLength(30),
+        Validators.required,
+        Validators.pattern(/^[a-zA-Z0-9]+$/)
+      ])],
+      OwnerLastName : ['', Validators.compose([
+        Validators.minLength(4),
+        Validators.maxLength(30),
+        Validators.required,
+        Validators.pattern(/^[a-zA-Z0-9]+$/)
       ])]
     });
     checkValidity(){
       this.checkingValidity = true;
       if(this.SignUpform.valid){
-        this.user = {
-          email: this.SignUpform.get('email')?.value,
-          password:this.SignUpform.get('password')?.value,
-          username: this.SignUpform.get('username')?.value
+        this.BusinessOwner = {
+          OwnerEmail: this.SignUpform.get('OwnerEmail')?.value,
+          OwnerPassword:this.SignUpform.get('OwnerPassword')?.value,
+          BusinessName: this.SignUpform.get('BusinessName')?.value,
+          OwnerPhone:this.SignUpform.get('OwnerPhone')?.value,
+          BusinessID:null,
+          OwnerFirstName:this.SignUpform.get('OwnerFirstName')?.value,
+          OwnerLastName:this.SignUpform.get('OwnerLastName')?.value,
         }
-        this.auth.register(this.user).subscribe(
+        this.auth.register(this.BusinessOwner).subscribe(
           (data)=>{
             this.auth.UserValidated=true;
             this.err = false;

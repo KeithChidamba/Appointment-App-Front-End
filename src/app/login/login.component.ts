@@ -1,8 +1,8 @@
 import { Component,Injectable } from '@angular/core';
-import { Validators,FormBuilder } from "@angular/forms";
-import { User } from "../interfaces/userInt";
+import { Validators,FormBuilder } from "node_modules/@angular/forms";
+import { Business } from "../interfaces/Business";
 import { AuthService } from "../services/auth.service";
-import { Router } from '@angular/router';
+import { Router } from 'node_modules/@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -17,19 +17,23 @@ export class LoginComponent {
   success = false;
   checkingValidity =false;
   errorAlert='';
-  user:User={
-    email: ' ',
-    password:'',
-    username: ''
+  BusinessOwner:Business={
+    OwnerEmail: ' ',
+    OwnerPassword:'',
+    BusinessName: '',
+    BusinessID:'',
+    OwnerFirstName:'',
+    OwnerLastName:'',
+    OwnerPhone:''
   };
     Loginform = this.fb.group({
-      username : ['', Validators.compose([
+      BusinessName : ['', Validators.compose([
         Validators.minLength(4),
         Validators.maxLength(15),
         Validators.required,
         Validators.pattern(/^[a-zA-Z0-9]+$/)
       ])],
-      password : ['', Validators.compose([
+      OwnerPassword : ['', Validators.compose([
         Validators.minLength(8),
         Validators.pattern(/^[a-zA-Z0-9]+$/),
         Validators.maxLength(30),
@@ -39,9 +43,9 @@ export class LoginComponent {
     checkValidity(){
       this.checkingValidity = true;
       if(this.Loginform.valid){
-        this.user.password = this.Loginform.get('password')?.value;
-        this.user.username =this.Loginform.get('username')?.value;
-        this.auth.login(this.user).subscribe(
+        this.BusinessOwner.OwnerPassword = this.Loginform.get('OwnerPassword')?.value;
+        this.BusinessOwner.BusinessName =this.Loginform.get('BusinessName')?.value;
+        this.auth.login(this.BusinessOwner).subscribe(
           (data)=>{
             this.auth.StoreToken(data);
             this.auth.LoadToken();

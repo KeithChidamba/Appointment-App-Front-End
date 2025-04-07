@@ -7,39 +7,69 @@
     <div class="container"  align="center">
       <!--<div class="success" *ngIf="success">Success</div>-->
       <h1>Sign Up</h1>
-       <!--username-->
+       <!--Business Name-->
       <div>
-        <label class="labels" for="username"><b>Username</b></label>
-        <input class="InputField" type="text" placeholder="Enter username" name="username" formControlName="username"  required>  
+        <label class="labels" for="username"><b>Business Name</b></label>
+        <input class="InputField" type="text" placeholder="Enter username" name="username" formControlName="BusinessName"  required>  
         <div *ngIf="checkingValidity">
-          <div class="alert" *ngIf="SignUpform.controls.username.errors?.['pattern']">no special cahracters</div>
-          <div class="alert" *ngIf="SignUpform.controls.username.errors?.['required']">this field is required</div>
-          <div class="alert" *ngIf="SignUpform.controls.username.errors?.['minlength']">Must be longer 3 cahracters</div>
-          <div class="alert" *ngIf="SignUpform.controls.username.errors?.['maxlength']">Must be shorter than 15 cahracters long</div>
+          <div class="alert" *ngIf="SignUpform.controls.BusinessName.errors?.['pattern']">no special cahracters</div>
+          <div class="alert" *ngIf="SignUpform.controls.BusinessName.errors?.['required']">this field is required</div>
+          <div class="alert" *ngIf="SignUpform.controls.BusinessName.errors?.['minlength']">Must be longer 3 cahracters</div>
+          <div class="alert" *ngIf="SignUpform.controls.BusinessName.errors?.['maxlength']">Must be shorter than 15 cahracters long</div>
         </div>
       </div>
-      <!--email  -->
+      <!--email-->
       <div>
-        <label class="labels" for="email"><b>Email  </b></label>
-        <input class="InputField" type="text" placeholder="Enter Email" name="email" formControlName="email" required>
+        <label class="labels" for="email"><b>Businnes Email  </b></label>
+        <input class="InputField" type="text" placeholder="Enter Email" name="email" formControlName="OwnerEmail" required>
         <div *ngIf="checkingValidity">
-          <div class="alert" *ngIf="SignUpform.controls.email.errors?.['email']">Invalid email</div>
-          <div class="alert" *ngIf="SignUpform.controls.email.errors?.['required']">this field is required</div>
-          <div class="alert" *ngIf="SignUpform.controls.email.errors?.['minlength']">Must be longer 5 characters</div>
-          <div class="alert" *ngIf="SignUpform.controls.email.errors?.['maxlength']">Must be shorter than 30 cahracters</div>
+          <div class="alert" *ngIf="SignUpform.controls.OwnerEmail.errors?.['email']">Invalid email</div>
+          <div class="alert" *ngIf="SignUpform.controls.OwnerEmail.errors?.['required']">this field is required</div>
+          <div class="alert" *ngIf="SignUpform.controls.OwnerEmail.errors?.['minlength']">Must be longer 5 characters</div>
+          <div class="alert" *ngIf="SignUpform.controls.OwnerEmail.errors?.['maxlength']">Must be shorter than 30 cahracters</div>
         </div>
       </div>
        <!--password-->
       <div>
               <label class="labels" for="psw"><b>Password</b></label>
-              <input class="InputField" type="password" placeholder="Enter Password" name="psw" formControlName="password"  required>
+              <input class="InputField" type="password" placeholder="Enter Password" name="psw" formControlName="OwnerPassword"  required>
               <div *ngIf="checkingValidity">
-                <div class="alert" *ngIf="SignUpform.controls.password.errors?.['required']">this field is required</div> 
-                <div class="alert" *ngIf="SignUpform.controls.password.errors?.['minlength']">Must be longer 8 </div>
-                <div class="alert" *ngIf="SignUpform.controls.password.errors?.['pattern']"> no special cahracters</div>
-                <div class="alert" *ngIf="SignUpform.controls.password.errors?.['maxlength']">Must be shorter than 35 cahracters long</div>
+                <div class="alert" *ngIf="SignUpform.controls.OwnerPassword.errors?.['required']">this field is required</div> 
+                <div class="alert" *ngIf="SignUpform.controls.OwnerPassword.errors?.['minlength']">Must be longer 8 </div>
+                <div class="alert" *ngIf="SignUpform.controls.OwnerPassword.errors?.['pattern']"> no special cahracters</div>
+                <div class="alert" *ngIf="SignUpform.controls.OwnerPassword.errors?.['maxlength']">Must be shorter than 35 cahracters long</div>
               </div>     
       </div>
+      <div><!--First Name-->
+          <label class="labels" for="psw"><b>First Name</b></label>
+          <input class="InputField" type="text" placeholder="Enter Name" name="firstname" formControlName="OwnerFirstName"  required>
+          <div *ngIf="checkingValidity">
+            <div class="alert" *ngIf="SignUpform.controls.OwnerFirstName.errors?.['required']">this field is required</div> 
+            <div class="alert" *ngIf="SignUpform.controls.OwnerFirstName.errors?.['minlength']">Must be longer 8 </div>
+            <div class="alert" *ngIf="SignUpform.controls.OwnerFirstName.errors?.['pattern']"> no special cahracters</div>
+            <div class="alert" *ngIf="SignUpform.controls.OwnerFirstName.errors?.['maxlength']">Must be shorter than 35 cahracters long</div>
+          </div>     
+      </div>
+      <div><!--Last Name-->
+        <label class="labels" for="psw"><b>Last Name</b></label>
+        <input class="InputField" type="text" placeholder="Enter Name" name="last name" formControlName="OwnerLastName"  required>
+        <div *ngIf="checkingValidity">
+          <div class="alert" *ngIf="SignUpform.controls.OwnerLastName.errors?.['required']">this field is required</div> 
+          <div class="alert" *ngIf="SignUpform.controls.OwnerLastName.errors?.['minlength']">Must be longer 8 </div>
+          <div class="alert" *ngIf="SignUpform.controls.OwnerLastName.errors?.['pattern']"> no special cahracters</div>
+          <div class="alert" *ngIf="SignUpform.controls.OwnerLastName.errors?.['maxlength']">Must be shorter than 35 cahracters long</div>
+        </div>     
+    </div>
+    <div><!--Phone-->
+      <label class="labels" for="psw"><b>Phone</b></label>
+      <input class="InputField" type="text" placeholder="Enter Phone Number" name="psw" formControlName="OwnerPhone"  required>
+      <div *ngIf="checkingValidity">
+        <div class="alert" *ngIf="SignUpform.controls.OwnerPhone.errors?.['required']">this field is required</div> 
+        <div class="alert" *ngIf="SignUpform.controls.OwnerPhone.errors?.['minlength']">Must be longer 8 </div>
+        <div class="alert" *ngIf="SignUpform.controls.OwnerPhone.errors?.['pattern']"> no special cahracters</div>
+        <div class="alert" *ngIf="SignUpform.controls.OwnerPhone.errors?.['maxlength']">Must be shorter than 35 cahracters long</div>
+      </div>     
+  </div>
        <!--Submit-->
      <div class="clearfix">
         <button type="button" class="cancelbtn" routerLink="/">Cancel</button>

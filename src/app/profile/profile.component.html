@@ -13,10 +13,10 @@
             <img src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg" width="100" height="110">
 
             <div class="name">
-                {{user.username}}
+                {{BusinessOwner.BusinessName}}
             </div>
             <div class="job">
-                {{user.email}}
+               {{BusinessOwner.OwnerEmail}}
             </div>
         </div>
 
@@ -31,16 +31,13 @@
                 <i class="fa fa-pen fa-xs edit"></i>
                 <ul>
                     <li>
-                        Username: <span>{{user.username}}</span>
+                        Username: <span>{{BusinessOwner.BusinessName}}</span>
                     </li>
                     <br>
                     <li>
-                        Email: <span>{{user.email}}</span>
+                        Email: <span>{{BusinessOwner.OwnerEmail}}</span>
                     </li>
                     <br>
-                    <li>
-                        Tasks: <span>{{number_of_Tasks}}</span>
-                    </li>
                 </ul>
             </div>
         </div>

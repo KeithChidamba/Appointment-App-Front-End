@@ -6,24 +6,24 @@
       <h1>Login</h1>
        <!--username-->
       <div>
-        <label class="labels" for="username"><b>Username</b></label>
-        <input class="InputField" type="text" placeholder="Enter username" name="username" formControlName="username"  required>  
+        <label class="labels" for="username"><b>Business Name</b></label>
+        <input class="InputField" type="text" placeholder="Enter username" name="username" formControlName="BusinessName"  required>  
         <div *ngIf="checkingValidity">
-          <div class="alert" *ngIf="Loginform.controls.username.errors?.['pattern']">no special cahracters</div>
-          <div class="alert" *ngIf="Loginform.controls.username.errors?.['required']">this field is required</div>
-          <div class="alert" *ngIf="Loginform.controls.username.errors?.['minlength']">Must be longer 3 cahracters</div>
-          <div class="alert" *ngIf="Loginform.controls.username.errors?.['maxlength']">Must be shorter than 15 cahracters long</div>
+          <div class="alert" *ngIf="Loginform.controls.BusinessName.errors?.['pattern']">no special cahracters</div>
+          <div class="alert" *ngIf="Loginform.controls.BusinessName.errors?.['required']">this field is required</div>
+          <div class="alert" *ngIf="Loginform.controls.BusinessName.errors?.['minlength']">Must be longer 3 cahracters</div>
+          <div class="alert" *ngIf="Loginform.controls.BusinessName.errors?.['maxlength']">Must be shorter than 15 cahracters long</div>
         </div><br>
          </div>
          <!--password-->
         <div>
                 <label class="labels" for="psw"><b>Password</b></label>
-                <input class="InputField" type="password" placeholder="Enter Password" name="psw" formControlName="password"  required>
+                <input class="InputField" type="password" placeholder="Enter Password" name="psw" formControlName="OwnerPassword"  required>
                 <div *ngIf="checkingValidity">
-                  <div class="alert" *ngIf="Loginform.controls.password.errors?.['required']">this field is required</div> 
-                  <div class="alert" *ngIf="Loginform.controls.password.errors?.['minlength']">Must be longer 8 </div>
-                  <div class="alert" *ngIf="Loginform.controls.password.errors?.['pattern']">no special cahracters </div>
-                  <div class="alert" *ngIf="Loginform.controls.password.errors?.['maxlength']">Must be shorter than 35 cahracters long</div>
+                  <div class="alert" *ngIf="Loginform.controls.OwnerPassword.errors?.['required']">this field is required</div> 
+                  <div class="alert" *ngIf="Loginform.controls.OwnerPassword.errors?.['minlength']">Must be longer 8 </div>
+                  <div class="alert" *ngIf="Loginform.controls.OwnerPassword.errors?.['pattern']">no special cahracters </div>
+                  <div class="alert" *ngIf="Loginform.controls.OwnerPassword.errors?.['maxlength']">Must be shorter than 35 cahracters long</div>
                 </div>
 
         </div>
