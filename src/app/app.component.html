@@ -1,0 +1,20 @@
+<div>
+  <ul>
+    <li *ngIf="auth.loggedIn()">
+       <a href="" routerLink="/dashboard" [routerLinkActive]="['active']"  [routerLinkActiveOptions]="{exact:true}">dashboard</a>
+      </li>
+        <li *ngIf="auth.loggedIn()">
+          <a href="" routerLink="/Profile"[routerLinkActive]="['active']"  [routerLinkActiveOptions]="{exact:true}"  >Profile</a>
+        </li>
+        <li *ngIf="!auth.loggedIn()">
+          <a href="" [routerLinkActive]="['active']"  [routerLinkActiveOptions]="{exact:true}"  routerLink="/register">Register</a>
+        </li>
+        <li *ngIf="!auth.loggedIn()" >
+          <a href="" [routerLinkActive]="['active']"  [routerLinkActiveOptions]="{exact:true}" routerLink="/login">Login</a>
+        </li>
+        <li *ngIf="auth.loggedIn()">
+          <a href=""  (click)="Logout()" routerLink="/">Logout</a>
+        </li>
+  </ul>
+</div>
+<router-outlet></router-outlet>

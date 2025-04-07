@@ -1,0 +1,152 @@
+<div *ngIf="Adding_task">
+    <form [formGroup]="Task_Form">
+        <div *ngIf="err" class="error">{{errorAlert}}</div>
+        <div class="container"  align="center">
+            <h1>Add task</h1>
+            <!--taskname-->
+            <div>
+                <label class="labels" for="username"><b>Task Name</b></label>
+                <input class="InputField" type="text" placeholder="Enter task name" formControlName="task_name"  required>  
+                <div *ngIf="checkingValidity">
+                    <div class="alert" *ngIf="Task_Form.controls.task_name.errors?.['required']">Task name is required</div>
+                    <div class="alert" *ngIf="Task_Form.controls.task_name.errors?.['minlength']">Task name must be longer 5 cahracters</div>
+                    <div class="alert" *ngIf="Task_Form.controls.task_name.errors?.['maxlength']">Task name must be shorter than 30 cahracters long</div>
+                </div> 
+            </div>
+            <!--task Decritption-->
+            <div>
+                <label class="labels" for="psw"><b>Description</b></label>
+                <input class="InputField" type="text" placeholder="Enter task Description..." formControlName="task_description"  required>
+                <div *ngIf="checkingValidity">
+                    <div class="alert" *ngIf="Task_Form.controls.task_description.errors?.['required']">Description field is required</div>
+                    <div class="alert" *ngIf="Task_Form.controls.task_description.errors?.['minlength']">Description must be longer than 5 characters</div>
+                    <div class="alert" *ngIf="Task_Form.controls.task_description.errors?.['maxlength']">Description must be shorter than 80 cahracters long</div>
+                </div>
+            </div>
+            <!--task Date-->
+            <div>
+                <label class="labels" for="psw"><b>Date</b></label>
+                <input class="InputField" type="date" placeholder="01-02-2000"  formControlName="Task_due_date"  required>
+                <div *ngIf="checkingValidity">
+                    <div class="alert" *ngIf="Task_Form.controls.Task_due_date.errors?.['required']">Date field is required</div>
+                </div>
+           </div>
+            <!--Form Buttons-->
+            <div class="clearfix">
+                <button type="button" class="cancelbtn" (click)="Add_task_View(false)">Cancel</button>
+                <button class="signupbtn" (click)="Add_task()">Add Task</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<!--Task navigation-->
+<div *ngIf="!Adding_task" class="task-nav">
+    <h1 align="center">{{username}}</h1>
+    <ul>
+        <li>
+            <button (click)="Show_tasks(2)">Today</button>
+        </li>
+        <li>
+            <button (click)="Show_tasks(3)">Tomorow</button>
+        </li>
+        <li>
+            <button (click)="Show_tasks(1)">Yesterday</button>
+        </li>
+        <li>
+            <button (click)="Show_tasks(4)">Tasks</button>
+        </li>
+        <li>
+            <button (click)="Add_task_View(true)">New Task</button>
+        </li>
+    </ul>
+    <div align="center" class="task_overview">  
+        <a (click)="ChangeWeekDay('back')"><img  height="35px" width="35px" src="assets/arrow.png"></a>
+        <span>
+            {{Current_day_of_week.Day_name}}
+        </span>
+        <a (click)="ChangeWeekDay('forward')"><img height="35px" style="rotate: 180deg;" width="35px" src="assets/arrow.png"></a>
+    </div>
+    <br>
+</div>
+
+ <!--Task description-->
+    <div  class="task_description" *ngIf="viewing_task!=0">
+        <div *ngFor="let task of tasks_" >
+            <div *ngIf="viewing_task==task.task_number">
+                <ul>
+                    <li>
+                        <a (click)="Show_task_description(task.task_number,0)">
+                            <img height="35px" width="35px" src="assets/arrow.png">
+                        </a>
+                    </li>
+                    <li>
+                        <a (click)="remove_task(task.task_name)">
+                            <img height="30px" width="25px" src="assets/bin.png">
+                        </a>
+                    </li>
+                </ul>
+                <br>
+                <h2 align="center">
+                    Description
+                </h2>
+                <p>{{task.task_description}}</p>
+            </div>
+        </div>
+    </div>
+
+<!--Main task view-->
+<div *ngIf="!Adding_task" class="Main-task-view">
+    <h1 class="header" align="center">Tasks</h1>
+    <div *ngIf="!viewing_days">
+        <h2 align="center">
+            {{current_view_day}}
+        </h2>
+        <ul *ngFor="let task of tasks_">
+            <div *ngIf="viewing_tasks==2">
+                <a (click)="Show_task_description(task.task_number,1)">
+                    <li *ngIf="task.Task_due_date==current_date">
+                        <span>{{task.task_name}}</span>
+                    </li>
+                </a>
+            </div>
+            <div *ngIf="viewing_tasks==3">
+                <a (click)="Show_task_description(task.task_number,1)">
+                    <li *ngIf="task.Task_due_date==tomorrow">
+                        <span>{{task.task_name}}</span>
+                    </li>
+                </a>
+            </div>
+            <div *ngIf="viewing_tasks==1">
+                <a (click)="Show_task_description(task.task_number,1)">
+                    <li *ngIf="task.Task_due_date==yesterday">
+                        <span>{{task.task_name}}</span>
+                    </li>
+                </a>
+            </div>
+            <div *ngIf="viewing_tasks==4">
+                <a (click)="Show_task_description(task.task_number,1)">
+                    <li>
+                        <span>{{task.task_name}}</span>
+                    </li>
+                </a>
+            </div>
+        </ul>
+    </div>
+    <div *ngIf="viewing_days">
+        <h2 align="center">
+            {{Current_day_of_week.Day_name}}
+        </h2>
+        <ul *ngFor="let task of tasks_">
+            <a (click)="Show_task_description(task.task_number,1)">
+                <li *ngIf="task.Task_due_Day==Current_day_of_week.Day_name">
+                    <span>
+                        {{task.task_name}}
+                    </span>
+                </li>  
+            </a>
+        </ul>
+    </div>
+</div>
+ 
+

@@ -1,0 +1,94 @@
+* {box-sizing: border-box}
+
+/* Full-width input fields */
+  input[type=text], input[type=password] {
+  width: 400px;
+  padding: 15px;
+  margin: 5px 0 22px 0;
+  display: inline-block;
+  border: none;
+  background: #f1f1f1;
+}
+
+input[type=text]:focus, input[type=password]:focus {
+  background-color: #ddd;
+  outline: grey;
+}
+
+hr {
+  border: 1px solid #f1f1f1;
+  margin-bottom: 25px;
+}
+li{
+  color: red;
+}
+/* Set a style for all buttons */
+button {
+  background-color: #04AA6D;
+  color: white;
+  border: none;
+  cursor: pointer;
+  width: 300px;
+  height: 70px;
+  vertical-align: middle;
+}
+
+button:hover {
+  opacity:1;
+}
+
+/* Extra styles for the cancel button */
+.cancelbtn {
+  background-color: #f44336;
+}
+
+/* Float cancel and signup buttons and add an equal width */
+/* Add padding to container elements */
+.container {
+  padding: 16px;
+}
+.labels{
+  line-height: 50px;
+  display: inline-block;
+vertical-align: middle;
+}
+/* Clear floats */
+.clearfix::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+.error{
+  border: 1px solid;
+  margin: 10px 0px;
+  padding: 15px 10px 15px 50px;
+  background-repeat: no-repeat;
+  background-position: 10px center;
+  text-align: center;
+  width:500px;
+  margin-left: 30%;
+}
+
+.error{
+  color: #D8000C;
+  background-color: #FFBABA;
+  background-image: url('https://i.imgur.com/GnyDvKN.png');
+}
+
+.alert {
+  width: 500px;
+  height: 20px;
+  font-family: sans-serif;
+  text-align: center;
+  font-size: 10px;
+  background-color: #FDF7DF;
+  border: 1px solid #FEEC6F;
+  color: #C9971C;
+  margin-bottom: 20px;
+  }
+/* Change styles for cancel button and signup button on extra small screens */
+@media screen and (max-width: 300px) {
+  .cancelbtn, .signupbtn {
+    width: 100%;
+  }
+}

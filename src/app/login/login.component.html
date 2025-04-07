@@ -1,0 +1,36 @@
+
+<form [formGroup]="Loginform"  style="border:1px solid #ccc">
+	<div *ngIf="err" class="error">{{errorAlert}}</div>
+
+    <div class="container"  align="center">
+      <h1>Login</h1>
+       <!--username-->
+      <div>
+        <label class="labels" for="username"><b>Username</b></label>
+        <input class="InputField" type="text" placeholder="Enter username" name="username" formControlName="username"  required>  
+        <div *ngIf="checkingValidity">
+          <div class="alert" *ngIf="Loginform.controls.username.errors?.['pattern']">no special cahracters</div>
+          <div class="alert" *ngIf="Loginform.controls.username.errors?.['required']">this field is required</div>
+          <div class="alert" *ngIf="Loginform.controls.username.errors?.['minlength']">Must be longer 3 cahracters</div>
+          <div class="alert" *ngIf="Loginform.controls.username.errors?.['maxlength']">Must be shorter than 15 cahracters long</div>
+        </div><br>
+         </div>
+         <!--password-->
+        <div>
+                <label class="labels" for="psw"><b>Password</b></label>
+                <input class="InputField" type="password" placeholder="Enter Password" name="psw" formControlName="password"  required>
+                <div *ngIf="checkingValidity">
+                  <div class="alert" *ngIf="Loginform.controls.password.errors?.['required']">this field is required</div> 
+                  <div class="alert" *ngIf="Loginform.controls.password.errors?.['minlength']">Must be longer 8 </div>
+                  <div class="alert" *ngIf="Loginform.controls.password.errors?.['pattern']">no special cahracters </div>
+                  <div class="alert" *ngIf="Loginform.controls.password.errors?.['maxlength']">Must be shorter than 35 cahracters long</div>
+                </div>
+
+        </div>
+         <!--Submit-->
+       <div class="clearfix">
+          <button type="button" class="cancelbtn" routerLink="/">Cancel</button>
+          <button class="signupbtn" (click)="checkValidity()">Sign Up</button>
+        </div>
+      </div>
+  </form>
