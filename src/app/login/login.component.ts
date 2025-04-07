@@ -1,8 +1,9 @@
 import { Component,Injectable } from '@angular/core';
 import { Validators,FormBuilder } from "node_modules/@angular/forms";
-import { Business } from "../interfaces/Business";
 import { AuthService } from "../services/auth.service";
 import { Router } from 'node_modules/@angular/router';
+import { LoginData } from '../interfaces/LoginData';
+import { Business } from '../models/Business';
 
 @Component({
   selector: 'app-login',
@@ -11,20 +12,15 @@ import { Router } from 'node_modules/@angular/router';
 })
 export class LoginComponent {
 
-
   constructor(private fb: FormBuilder,public auth:AuthService,private router:Router) { } 
   err = false;
   success = false;
   checkingValidity =false;
   errorAlert='';
-  BusinessOwner:Business={
-    OwnerEmail: ' ',
-    OwnerPassword:'',
-    BusinessName: '',
-    BusinessID:'',
-    OwnerFirstName:'',
-    OwnerLastName:'',
-    OwnerPhone:''
+  BusinessOwner:LoginData={
+      BusinessName: '',
+      OwnerPassword:''
+      ,OwnerEmail: ' '
   };
     Loginform = this.fb.group({
       BusinessName : ['', Validators.compose([
@@ -40,20 +36,22 @@ export class LoginComponent {
         Validators.required
       ])]
     });
+
     checkValidity(){
       this.checkingValidity = true;
       if(this.Loginform.valid){
         this.BusinessOwner.OwnerPassword = this.Loginform.get('OwnerPassword')?.value;
-        this.BusinessOwner.BusinessName =this.Loginform.get('BusinessName')?.value;
+        this.BusinessOwner.BusinessName = this.Loginform.get('BusinessName')?.value;
         this.auth.login(this.BusinessOwner).subscribe(
           (data)=>{
+            this.auth.BusinessloginData = this.BusinessOwner;
             this.auth.StoreToken(data);
             this.auth.LoadToken();
             this.auth.loggedIn();
             this.success = true;
             this.err = false;
             setTimeout(()=>{
-                this.router.navigate(['/dashboard'])
+                this.router.navigate(['/profile'])
             },500)
             this.router 
           },

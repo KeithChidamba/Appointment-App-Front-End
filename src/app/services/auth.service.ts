@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders, HttpEvent} from "@angular/common/http";
-import { Business } from '../interfaces/Business';
 import { catchError,throwError} from 'rxjs';
 import { JwtHelperService } from "node_modules/@auth0/angular-jwt";
 import { DatePipe } from '@angular/common';
+import { LoginData } from '../interfaces/LoginData';
+import { Business } from '../models/Business';
 
 @Injectable({
   providedIn: 'root'
@@ -17,13 +18,19 @@ export class AuthService {
   isLoggedIn = false;
   options:any;
   authToken:any;
+  BusinessloginData:LoginData={
+    BusinessName: '',
+    OwnerPassword:''
+    ,OwnerEmail: ' '
+};
+
      register(BusinessOwner:Business) {
-          return this.http.post<Business>(this.domain+ '/auth/register',BusinessOwner).pipe(  
+          return this.http.post<Business>(this.domain+ '/api/auth/register',BusinessOwner).pipe(  
             catchError(this.handleError)
           )
     }
-     login(BusinessOwner:Business) {
-          return this.http.post<Business>(this.domain+ '/auth/login',BusinessOwner).pipe(  
+     login(BusinessOwner:LoginData) {
+          return this.http.post<Business>(this.domain+ '/api/auth/login',BusinessOwner).pipe(  
             catchError(this.handleError)
           )
     }
@@ -35,9 +42,11 @@ export class AuthService {
             'authorization':this.authToken
         })}
     }
-    getProfile(){
+    getBusinessData(LoginData:LoginData){
       this.createAuthenticationHeaders();
-      return this.http.get(this.domain+ '/authentication/profile',this.options);
+      return this.http.post<Business>(this.domain+ '/api/auth/GetBusinessData',LoginData).pipe(  
+        catchError(this.handleError)
+      )
     }
     LoadToken(){
       this.authToken = localStorage.getItem('Token_id');

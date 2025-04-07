@@ -1,6 +1,7 @@
 import { Component,OnInit,Injectable } from '@angular/core';
 import { AuthService } from "../services/auth.service";
-import { Business } from '../interfaces/Business';
+import { LoginData } from '../interfaces/LoginData';
+import { Business } from '../models/Business';
 
 @Component({
   selector: 'app-profile',
@@ -11,30 +12,30 @@ import { Business } from '../interfaces/Business';
   providedIn: 'root'
 })
 export class ProfileComponent {
-  BusinessOwner:Business={
-    OwnerEmail: ' ',
-    OwnerPassword:'',
+  constructor(public auth:AuthService) {}
+  BusinessOwner: Business = new Business(0, '', '', '', '', '', '');
+  LoginData:LoginData={
     BusinessName: '',
-    BusinessID:'',
-    OwnerFirstName:'',
-    OwnerLastName:'',
-    OwnerPhone:''
-  };
+    OwnerPassword:''
+    ,OwnerEmail: ' '};
 loaded = false;
-number_of_Tasks = 0;
-constructor(public auth:AuthService){}
-ngOnInit(){
+
+ngOnInit() {
   if(!this.loaded){
-    this.auth.getProfile().subscribe(
-      (profile)=>{
-        this.load_user_info(profile)
+    this.auth.getBusinessData(this.auth.BusinessloginData).subscribe(
+      (BusinessData)=>{
+        this.load_user_info(BusinessData)
       }
     )
   }
 }
-load_user_info(info:any){
-    this.BusinessOwner.BusinessName =JSON.stringify(info.name).slice(1, -1);
-    this.BusinessOwner.OwnerEmail=JSON.stringify(info.email).slice(1, -1);
+load_user_info(info:Business){
+    this.BusinessOwner.BusinessName = info.BusinessName;
+    this.BusinessOwner.OwnerFirstName = info.OwnerFirstName;
+    this.BusinessOwner.OwnerLastName = info.OwnerLastName;
+    this.BusinessOwner.OwnerEmail = info.OwnerEmail;
+    this.BusinessOwner.OwnerPhone = info.OwnerPhone;
+    this.BusinessOwner.OwnerPassword = info.OwnerPassword;
     this.loaded = true;
 }
 }

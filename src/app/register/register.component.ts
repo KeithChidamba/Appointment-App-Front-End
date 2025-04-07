@@ -1,8 +1,8 @@
 import { Component,Injectable } from '@angular/core';
 import { Validators,FormBuilder } from "node_modules/@angular/forms";
-import { Business } from "../interfaces/Business";
 import { AuthService } from "../services/auth.service";
 import { Router } from 'node_modules/@angular/router';
+import { Business } from '../models/Business';
 
 @Component({
   selector: 'app-register',
@@ -19,10 +19,10 @@ export class RegisterComponent {
   err = false;
   success = false;
   BusinessOwner:Business={
+    BusinessID:0,
     OwnerEmail: ' ',
     OwnerPassword:'',
     BusinessName: '',
-    BusinessID:'',
     OwnerFirstName:'',
     OwnerLastName:'',
     OwnerPhone:''
@@ -67,13 +67,13 @@ export class RegisterComponent {
       this.checkingValidity = true;
       if(this.SignUpform.valid){
         this.BusinessOwner = {
-          OwnerEmail: this.SignUpform.get('OwnerEmail')?.value,
-          OwnerPassword:this.SignUpform.get('OwnerPassword')?.value,
-          BusinessName: this.SignUpform.get('BusinessName')?.value,
-          OwnerPhone:this.SignUpform.get('OwnerPhone')?.value,
-          BusinessID:null,
-          OwnerFirstName:this.SignUpform.get('OwnerFirstName')?.value,
-          OwnerLastName:this.SignUpform.get('OwnerLastName')?.value,
+          OwnerEmail: this.SignUpform.get('OwnerEmail')?.value as string,
+          OwnerPassword:this.SignUpform.get('OwnerPassword')?.value as string,
+          BusinessName: this.SignUpform.get('BusinessName')?.value as string,
+          OwnerPhone:this.SignUpform.get('OwnerPhone')?.value as string,
+          OwnerFirstName:this.SignUpform.get('OwnerFirstName')?.value as string,
+          OwnerLastName:this.SignUpform.get('OwnerLastName')?.value as string,
+          BusinessID:0
         }
         this.auth.register(this.BusinessOwner).subscribe(
           (data)=>{
