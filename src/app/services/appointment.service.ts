@@ -4,6 +4,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { catchError,Observable,throwError} from 'rxjs';
 import { Business } from '../models/Business';
 import { AuthService } from './auth.service';
+import { Timeslot } from '../models/Timeslot';
 @Injectable({
   providedIn: 'root'
 })
@@ -13,8 +14,15 @@ export class AppointmentService {
   //domain = "https://nail-appointment-backend-production.up.railway.app";
   domain = "http://localhost:8080";
   CurrentBusinessOwner: Business = new Business(0, '', '', '', '', '', '');
+  BlankSlotForBooking:Timeslot = new Timeslot('','','',null,0);
   public RecieveData(data:Business){
     this.CurrentBusinessOwner = new Business(0, data.BusinessName, data.OwnerFirstName, data.OwnerLastName, data.OwnerEmail, data.OwnerPhone, data.OwnerPassword);
+  }
+  public GiveBlankSlotForBooking():Timeslot{
+    return this.BlankSlotForBooking;
+  }
+  public RecieveAppointmentToBook(BlankSlot:Timeslot){
+    this.BlankSlotForBooking=BlankSlot;
   }
   GetPendingAppointments():Observable<Appointment[]>{
     const headers = this.auth.createAuthenticationHeaders();

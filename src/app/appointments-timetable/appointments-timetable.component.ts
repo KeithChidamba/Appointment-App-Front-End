@@ -24,8 +24,6 @@ NavigationHistory:NavigationIndex[] = [];
 CurrentWeekNavigationIndex:number=0;
 CurrentAppointmentIndex:number=0;
 AppointmentsLoaded:boolean = false;
-isBookingAppointment:boolean = false;
-EditingAppointment:boolean = false;
 DayViewIndex:number = 0;
 NumFutureWeeksAhead:number = 0;
 MaxFutureWeeksToShow:number = 3;
@@ -51,18 +49,6 @@ ngOnInit() {
   this.NumFutureWeeksAhead = 0;
 }
  
-  BookAppointment(Blankslot: Timeslot, isBlank: boolean) {
-    if (this.ViewerIsBusinessOwner) return;
-    if (isBlank) {
-      this.isBookingAppointment = true;
-      this.EditingAppointment = false;
-     // OnBlankSlotSelected?.Invoke(Blankslot);
-    } else {
-      this.EditingAppointment = true;
-      this.isBookingAppointment = false;
-      //OnAppoinmentSlotSelected?.Invoke(Blankslot);
-    }
-  }
 
   SwitchView() {
     this.UpdateView(!this.ShowDaliyOnly);

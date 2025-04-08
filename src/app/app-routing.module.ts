@@ -7,6 +7,7 @@ const routes: Routes = [
   { path: 'login', loadChildren: () => import('./login/login.module').then(m => m.LoginModule)},
   { path: 'Profile', loadChildren: () => import('./profile/profile.module').then(m => m.ProfileModule),canActivate: [AuthGuard] },
   { path: 'AppointmentsTimetable', loadChildren: () => import('./appointments-timetable/appointments-timetable.module').then(m => m.AppointmentsTimetableModule),canActivate: [AuthGuard] },
+  { path: 'AppointmentForm', loadChildren: () => import('./appointment-form/appointment-form.module').then(m => m.AppointmentFormModule), canActivate: [AuthGuard]},
   { path: '**', loadChildren: () => import('./home/home.module').then(m => m.HomeModule),pathMatch:'full'}
   ];
 

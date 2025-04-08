@@ -7,11 +7,13 @@ import { HttpClientModule } from '@angular/common/http';
 import { DatePipe } from '@angular/common';
 import { AppointmentService } from './services/appointment.service';
 import { TimeslotsForDayComponent } from './timeslots-for-day/timeslots-for-day.component';
+import { AppointmentFormComponent } from './appointment-form/appointment-form.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    TimeslotsForDayComponent
+    TimeslotsForDayComponent,
+    AppointmentFormComponent
   ],
   imports: [
     BrowserModule,

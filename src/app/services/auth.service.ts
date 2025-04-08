@@ -11,18 +11,11 @@ import { Business } from '../models/Business';
 })
 export class AuthService {
   constructor(public http:HttpClient,public dp:DatePipe) { }
-  UserValidated = false;
-  helper = new JwtHelperService();
+  private helper = new JwtHelperService();
   //domain = "https://nail-appointment-backend-production.up.railway.app";
-  domain = "http://localhost:8080";
-  isLoggedIn = false;
-  options:any;
-  authToken:string ='';
-  BusinessloginData:LoginData={
-    BusinessName: '',
-    OwnerPassword:''
-    ,OwnerEmail: ' '
-};
+  private domain = "http://localhost:8080";
+  private isLoggedIn = false;
+  private authToken:string ='';
 
      register(BusinessOwner:Business) {
           return this.http.post<Business>(this.domain+ '/api/auth/register',BusinessOwner).pipe(  
