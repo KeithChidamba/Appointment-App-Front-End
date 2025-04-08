@@ -34,6 +34,12 @@ export class LoginComponent {
         Validators.pattern(/^[a-zA-Z0-9]+$/),
         Validators.maxLength(30),
         Validators.required
+      ])],
+      OwnerEmail : ['', Validators.compose([
+        Validators.minLength(5),
+        Validators.maxLength(30),
+        Validators.required,
+        Validators.email
       ])]
     });
 
@@ -42,6 +48,7 @@ export class LoginComponent {
       if(this.Loginform.valid){
         this.BusinessOwner.OwnerPassword = this.Loginform.get('OwnerPassword')?.value;
         this.BusinessOwner.BusinessName = this.Loginform.get('BusinessName')?.value;
+        this.BusinessOwner.OwnerEmail = this.Loginform.get('OwnerEmail')?.value;
         this.auth.login(this.BusinessOwner).subscribe(
           (data)=>{
             this.auth.BusinessloginData = this.BusinessOwner;

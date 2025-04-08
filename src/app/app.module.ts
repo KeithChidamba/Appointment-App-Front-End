@@ -5,6 +5,7 @@ import { AppComponent } from './app.component';
 import { AuthService } from './services/auth.service';
 import { HttpClientModule } from '@angular/common/http';
 import { DatePipe } from '@angular/common';
+import { AppointmentService } from './services/appointment.service';
 
 @NgModule({
   declarations: [
@@ -14,7 +15,7 @@ import { DatePipe } from '@angular/common';
     BrowserModule,
     AppRoutingModule,HttpClientModule
   ],
-  providers: [AuthService,DatePipe],
+  providers: [AuthService,AppointmentService,DatePipe],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

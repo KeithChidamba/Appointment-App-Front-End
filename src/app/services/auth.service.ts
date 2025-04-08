@@ -17,7 +17,7 @@ export class AuthService {
   domain = "http://localhost:8080";
   isLoggedIn = false;
   options:any;
-  authToken:any;
+  authToken:string ='';
   BusinessloginData:LoginData={
     BusinessName: '',
     OwnerPassword:''
@@ -30,36 +30,40 @@ export class AuthService {
           )
     }
      login(BusinessOwner:LoginData) {
-          return this.http.post<Business>(this.domain+ '/api/auth/login',BusinessOwner).pipe(  
+          return this.http.post<string>(this.domain+ '/api/auth/login',BusinessOwner).pipe(  
             catchError(this.handleError)
           )
     }
     createAuthenticationHeaders(){
-        this.LoadToken();
-        this.options = {
-          headers: new HttpHeaders({
-            'Content-Type':'application/json',
-            'authorization':this.authToken
-        })}
+      this.LoadToken();
+      console.log(this.authToken);
+      const headers = new HttpHeaders({
+        'Authorization': `Bearer ${this.authToken}`,
+        'Content-Type': 'application/json',
+      });
+      return headers;
     }
-    getBusinessData(LoginData:LoginData){
-      this.createAuthenticationHeaders();
-      return this.http.post<Business>(this.domain+ '/api/auth/GetBusinessData',LoginData).pipe(  
+    getBusinessData(){
+      const headers = this.createAuthenticationHeaders();
+      return this.http.get<Business>(this.domain+ '/api/auth/GetBusinessData',{headers}).pipe(  
         catchError(this.handleError)
       )
     }
     LoadToken(){
-      this.authToken = localStorage.getItem('Token_id');
-
+      var token = localStorage.getItem('Token_id') as string;
+      if(token==null)return;
+      var tokenJSON = JSON.parse(token);
+      this.authToken = tokenJSON.token;
     }
-    StoreToken(BusinessOwner:Business){
-       localStorage.setItem('Token_id',JSON.stringify(BusinessOwner).slice(1, -1));
+    StoreToken(token:string){
+       localStorage.setItem('Token_id',JSON.stringify(token));
     }
     Logout(){
         localStorage.clear();
-        this.authToken = null;
+        this.authToken = '';
     }
     loggedIn(){
+      this.LoadToken();
       let current_date = this.dp.transform((new Date),'MM/dd/yyyy h:mm:ss');
       let token_date = this.helper.getTokenExpirationDate(this.authToken);
       if(token_date!=undefined&&current_date!=null){

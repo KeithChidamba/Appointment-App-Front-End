@@ -27,6 +27,16 @@
                 </div>
 
         </div>
+        <div>
+          <label class="labels" for="email"><b>Businnes Email  </b></label>
+          <input class="InputField" type="text" placeholder="Enter Email" name="email" formControlName="OwnerEmail" required>
+          <div *ngIf="checkingValidity">
+            <div class="alert" *ngIf="Loginform.controls.OwnerEmail.errors?.['email']">Invalid email</div>
+            <div class="alert" *ngIf="Loginform.controls.OwnerEmail.errors?.['required']">this field is required</div>
+            <div class="alert" *ngIf="Loginform.controls.OwnerEmail.errors?.['minlength']">Must be longer 5 characters</div>
+            <div class="alert" *ngIf="Loginform.controls.OwnerEmail.errors?.['maxlength']">Must be shorter than 30 cahracters</div>
+          </div>
+        </div>
          <!--Submit-->
        <div class="clearfix">
           <button type="button" class="cancelbtn" routerLink="/">Cancel</button>

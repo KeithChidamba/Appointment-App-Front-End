@@ -2,6 +2,7 @@ import { Component,OnInit,Injectable } from '@angular/core';
 import { AuthService } from "../services/auth.service";
 import { LoginData } from '../interfaces/LoginData';
 import { Business } from '../models/Business';
+import { AppointmentService } from '../services/appointment.service';
 
 @Component({
   selector: 'app-profile',
@@ -12,7 +13,7 @@ import { Business } from '../models/Business';
   providedIn: 'root'
 })
 export class ProfileComponent {
-  constructor(public auth:AuthService) {}
+  constructor(public auth:AuthService, private apntment:AppointmentService) {}
   BusinessOwner: Business = new Business(0, '', '', '', '', '', '');
   LoginData:LoginData={
     BusinessName: '',
@@ -22,7 +23,7 @@ loaded = false;
 
 ngOnInit() {
   if(!this.loaded){
-    this.auth.getBusinessData(this.auth.BusinessloginData).subscribe(
+    this.auth.getBusinessData().subscribe(
       (BusinessData)=>{
         this.load_user_info(BusinessData)
       }
@@ -37,5 +38,6 @@ load_user_info(info:Business){
     this.BusinessOwner.OwnerPhone = info.OwnerPhone;
     this.BusinessOwner.OwnerPassword = info.OwnerPassword;
     this.loaded = true;
+    this.apntment.RecieveData(this.BusinessOwner);
 }
 }
