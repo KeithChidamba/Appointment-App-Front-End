@@ -6,10 +6,12 @@ import { AuthService } from './services/auth.service';
 import { HttpClientModule } from '@angular/common/http';
 import { DatePipe } from '@angular/common';
 import { AppointmentService } from './services/appointment.service';
+import { TimeslotsForDayComponent } from './timeslots-for-day/timeslots-for-day.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    TimeslotsForDayComponent
   ],
   imports: [
     BrowserModule,

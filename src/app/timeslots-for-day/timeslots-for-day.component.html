@@ -1,0 +1,18 @@
+@foreach (T)
+
+    <div *ngFor="let slot in Timeslots">
+        <div *ngIf="slot.isBLank">
+            <a (onclick)="BookAppointment(slot)">
+                <div  [style]="slot.StylingSlotHeight" class="Appointment-blank">
+                    <span>Open</span>
+                </div>
+        </a>
+        </div>
+        <div *ngIf="!slot.isBLank">
+            <a @onclick="EditAppointment(slot)">
+                <div pstyle]="slot.StylingSlotHeight" class="Appointment-filled">
+                    <span>{{ slot.CurrentAppointment.AppointmentName }}</span>
+                </div>
+            </a>
+        </div>
+

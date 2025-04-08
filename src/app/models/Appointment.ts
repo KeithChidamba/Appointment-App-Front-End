@@ -1,16 +1,16 @@
 export class Appointment{
     constructor(    
-        public  AppomentID: number,
+        public  AppointmentID: number,
         public  ClientFirstName:string,
         public  ClientLastName:string,
         public  ClientEmail:string,
         public  ClientPhone:string,
-        public  AppomentDate:string,
-        public  AppomentTime:string,
+        public  AppointmentDate:string,
+        public  AppointmentTime:string,
         public  DateTimeWhenBooked:string,
-        public  AppomentPrice:number,
-        public  AppomentName:string,
-        public  AppomentDurationInMinutes:number,
-        public  isConfirmed:boolean,
+        public  AppointmentPrice:number,
+        public  AppointmentName:string,
+        public  AppointmentDurationInMinutes:number,
+        public  isConfirmed:number,
         public  BusinessID:number){}
 }
