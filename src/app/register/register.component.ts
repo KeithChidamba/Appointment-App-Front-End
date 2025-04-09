@@ -77,7 +77,6 @@ export class RegisterComponent {
         }
         this.auth.register(this.BusinessOwner).subscribe(
           (data)=>{
-            this.auth.UserValidated=true;
             this.err = false;
             this.success=true;
             setTimeout(()=>{

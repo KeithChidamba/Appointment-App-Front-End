@@ -8,10 +8,10 @@ import { Timeslot } from '../models/Timeslot';
   styleUrls: ['./appointment-form.component.css']
 })
 export class AppointmentFormComponent {
-constructor(private apmnt:AppointmentService){}
-BlankSlotForBooking:Timeslot = new Timeslot('','','',null,0);
-ngOnInit(){
-  this.BlankSlotForBooking = this.apmnt.GiveBlankSlotForBooking();
-  console.log(this.BlankSlotForBooking);
+  constructor(private apmnt:AppointmentService){}
+  BlankSlotForBooking:Timeslot = new Timeslot('','','',null,0);
+  ngOnInit(){
+    this.BlankSlotForBooking = this.apmnt.GetCurrentSlot();
+    console.log(this.BlankSlotForBooking);
 }
 }

@@ -11,19 +11,20 @@ import { Timeslot } from '../models/Timeslot';
 export class AppointmentService {
 
   constructor(public http:HttpClient, private auth:AuthService) { }
-  //domain = "https://nail-appointment-backend-production.up.railway.app";
-  domain = "http://localhost:8080";
+  domain = "https://nail-appointment-backend-production.up.railway.app";
+  //domain = "http://localhost:8080";
   CurrentBusinessOwner: Business = new Business(0, '', '', '', '', '', '');
-  BlankSlotForBooking:Timeslot = new Timeslot('','','',null,0);
+  CurrentStoredTimeslot:Timeslot = new Timeslot('','','',null,0);
   public RecieveData(data:Business){
     this.CurrentBusinessOwner = new Business(0, data.BusinessName, data.OwnerFirstName, data.OwnerLastName, data.OwnerEmail, data.OwnerPhone, data.OwnerPassword);
   }
-  public GiveBlankSlotForBooking():Timeslot{
-    return this.BlankSlotForBooking;
+  public GetCurrentSlot():Timeslot{
+    return this.CurrentStoredTimeslot;
   }
-  public RecieveAppointmentToBook(BlankSlot:Timeslot){
-    this.BlankSlotForBooking=BlankSlot;
+  public RecieveAppointmentToBook(Slot:Timeslot){
+    this.CurrentStoredTimeslot=Slot;
   }
+  
   GetPendingAppointments():Observable<Appointment[]>{
     const headers = this.auth.createAuthenticationHeaders();
     return this.http.get<Appointment[]>(this.domain+'/api/appointments/getPending',{headers}).pipe(  

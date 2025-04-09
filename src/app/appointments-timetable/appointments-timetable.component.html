@@ -1,8 +1,8 @@
 <div class="Whole-Table"><h1 [style]="HeadingWidthStyle">BookingsTimetable</h1> 
      <div class="Timetable-Settings">
-          <a (onclick)="NavigateTable(false)"><div class="Timetable-Nav">{{ NavigateBacktext }}</div></a>
-          <a (onclick)="NavigateTable(true)"><div class="Timetable-Nav">{{ NavigateForwardtext }}</div></a>
-          <a (onclick)="SwitchView">Switch View</a>
+          <a (click)="NavigateTable(false)"><div class="Timetable-Nav">{{ NavigateBacktext }}</div></a>
+          <a (click)="NavigateTable(true)"><div class="Timetable-Nav">{{ NavigateForwardtext }}</div></a>
+          <a (click)="SwitchView()"><div class="Timetable-Nav">Switch View</div></a>
           <input type="checkbox" disabled=true [checked]="ShowDaliyOnly"> 
      </div>
         <div *ngIf="AppointmentsLoaded">
@@ -14,33 +14,33 @@
                         <div *ngIf="ShowDaliyOnly">
                             <div class="TimeTable-Day">
                                 <div [style]="HeaderWidthStyle" class="Weekdays">
-                                     <span>{{ CurrentWeekDates[DayViewIndex] | date: 'dddd' }}</span><br/>
-                                     <span>{{ CurrentWeekDates[DayViewIndex]| date: 'd MMMM' }}</span>
+                                     <span>{{ CurrentWeekDates[DayViewIndex] | date: 'EEEE' }}</span><br/>
+                                     <span>{{ CurrentWeekDates[DayViewIndex] | date: 'd MMMM' }}</span>
                                 </div>
                                 <app-timeslots-for-day 
                                     [WeekDays]="WeekDays" 
-                                    [CurrentWeekIndex]="i">
+                                    [CurrentWeekIndex]="DayViewIndex"
+                                    [isDailyViewMode]="true">
                                 </app-timeslots-for-day>    
                             </div> 
                         </div>
-                        <div  *ngIf="!ShowDaliyOnly">
-                            <div *ngFor="let day of WeekDaysToShow; let i = index">
-                                <div class="TimeTable-Day">
-                                    <div [style]="HeaderWidthStyle" class="Weekdays">
-                                        <span>{{ CurrentWeekDates[i] | date: 'dddd' }}</span><br/>
-                                        <span>{{ CurrentWeekDates[i]| date: 'd MMMM' }}</span>
+                                <div *ngFor="let day of WeekDaysToShow;index as i" class="TimeTable-Day">
+                                    <div  *ngIf="!ShowDaliyOnly">
+                                        <div [style]="HeaderWidthStyle" class="Weekdays">
+                                            <span>{{ CurrentWeekDates[i] | date: 'EEEE' }}</span><br/>
+                                            <span>{{ CurrentWeekDates[i] | date: 'd MMMM' }}</span>
+                                        </div>
+                                        <app-timeslots-for-day 
+                                            [WeekDays]="WeekDays" 
+                                            [CurrentWeekIndex]="i"
+                                            [isDailyViewMode]="false">
+                                        </app-timeslots-for-day>
                                     </div>
-                                    <app-timeslots-for-day 
-                                        [WeekDays]="WeekDays" 
-                                        [CurrentWeekIndex]="i">
-                                    </app-timeslots-for-day>
                                 </div>
-                            </div>                            
-                        </div>
                </div>
                <div class="TimeTable-Times">
-                    <div *ngFor="let slot of Timeslots; i=index" class="Timeslot-Hour" [style]="TimeslotWidthStyle">
-                         <span [style]="TimeslotSeperatorStyle">{{ StartOfWorkday.AddHours(i) | date: 'HH:mm'  }}</span><br/>
+                    <div *ngFor="let slot of TimeslotNumbers;" class="Timeslot-Hour" [style]="TimeslotWidthStyle">
+                         <span [style]="TimeslotSeperatorStyle">{{ StartOfWorkday.getTime() + (slot * 60 * 60 * 1000) | date: 'HH:mm'  }}</span><br/>
                     </div>
                </div>
         </div>

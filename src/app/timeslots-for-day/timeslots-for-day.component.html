@@ -1,17 +1,17 @@
-<div *ngFor="let slot in Timeslots">
-        <div *ngIf="slot.isBLank">
-            <a (onclick)="BookAppointment(slot)">
-                <div  [style]="slot.StylingSlotHeight" class="Appointment-blank">
-                    <span>Open</span>
-                </div>
-            </a>
+<div *ngFor="let slot of Timeslots">
+    <div *ngIf="slot.isBlank">
+      <a (click)="BookAppointment(slot)">
+        <div [style]="slot.StylingSlotHeight" class="Appointment-blank">
+          <span>Open</span>
         </div>
-        <div *ngIf="!slot.isBLank">
-            <a (onclick)="EditAppointment(slot)">
-                <div pstyle]="slot.StylingSlotHeight" class="Appointment-filled">
-                    <span>{{ slot.CurrentAppointment.AppointmentName }}</span>
-                </div>
-            </a>
+      </a>
+    </div>
+    <div *ngIf="!slot.isBlank">
+      <a (click)="EditAppointment(slot)">
+        <div [style]="slot.StylingSlotHeight" class="Appointment-filled">
+          <span>{{ slot.CurrentAppointment?.AppointmentName }}</span>
         </div>
-</div>
-
+      </a>
+    </div>
+  </div>
+  

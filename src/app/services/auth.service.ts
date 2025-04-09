@@ -12,9 +12,9 @@ import { Business } from '../models/Business';
 export class AuthService {
   constructor(public http:HttpClient,public dp:DatePipe) { }
   private helper = new JwtHelperService();
-  //domain = "https://nail-appointment-backend-production.up.railway.app";
-  private domain = "http://localhost:8080";
-  private isLoggedIn = false;
+  private domain = "https://nail-appointment-backend-production.up.railway.app";
+  //private domain = "http://localhost:8080";
+  public isLoggedIn = false;
   private authToken:string ='';
 
      register(BusinessOwner:Business) {
@@ -29,7 +29,6 @@ export class AuthService {
     }
     createAuthenticationHeaders(){
       this.LoadToken();
-      console.log(this.authToken);
       const headers = new HttpHeaders({
         'Authorization': `Bearer ${this.authToken}`,
         'Content-Type': 'application/json',

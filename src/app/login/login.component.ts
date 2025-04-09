@@ -51,7 +51,6 @@ export class LoginComponent {
         this.BusinessOwner.OwnerEmail = this.Loginform.get('OwnerEmail')?.value;
         this.auth.login(this.BusinessOwner).subscribe(
           (data)=>{
-            this.auth.BusinessloginData = this.BusinessOwner;
             this.auth.StoreToken(data);
             this.auth.LoadToken();
             this.auth.loggedIn();

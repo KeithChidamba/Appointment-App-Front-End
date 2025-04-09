@@ -1,0 +1,87 @@
+.Table-Content{
+    display: grid;
+    grid-template-columns: repeat(9, 1fr);
+    width: fit-content;
+    z-index: 2;
+    position: absolute;
+}
+.Whole-Table{
+    position: relative;
+    height: auto;
+    width: fit-content;
+    margin-bottom: 7%;
+    align-items: center;
+    justify-content: center;
+}
+.Whole-Table h1{
+    font-weight: bold;
+    text-align: center;
+    background-color: #9dc2b7;
+    justify-content: center;
+    border-style: none;
+    border-radius: 5px;
+}
+.Timeslot-Hour{
+    border: 3px solid #3f3e3e;
+    height: 50px;
+    display: flex;
+    align-items: center;
+}
+.Timeslot-Hour span{
+    border-right: 2px solid black;
+    height:100%;
+}
+
+.TimeTable-Times{
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    margin-top:4vw;
+}
+.Timetable-Settings{
+    display: flex;
+    flex-direction: row;
+    gap: 0.5vw;
+    position:relative;
+    margin-top:0.25vw;
+    background-color: #9dc2b7;
+    align-items: center;
+    justify-content: center;
+    border-style: none;
+    border-radius: 5px;
+}
+.Timetable-Nav{
+    font-weight: bold;
+    padding: 0.25vw;
+    font-weight: bold;
+    color: black;
+    border-style: none;
+    border-radius: 5px;
+}
+.Timetable-Nav:Hover{
+    background-color: rgb(0, 78, 141);
+    color: white;
+}
+
+a{
+    text-decoration: none;
+    cursor: pointer;
+}
+span{
+    font-weight: bold;
+    font-size: clamp(1.2rem,5vw + 1rem);
+}
+.Weekdays{
+    height: 4vw;
+    text-align: center;
+    align-items: center;
+    font-weight: bold;
+    font-size: clamp(1.3rem,5vw + 1rem);
+    color: #ffffff;
+    background-color: #5a8f7f;
+    border: 2px solid black;
+    justify-content: center;
+    width: fit-content;
+}
+
