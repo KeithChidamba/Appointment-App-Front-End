@@ -64,7 +64,7 @@ export class AuthService {
             }else{
               this.isLoggedIn =false;
             }
-          }
+          }else return false;
       return this.isLoggedIn
     }
     private handleError(error: HttpErrorResponse) {

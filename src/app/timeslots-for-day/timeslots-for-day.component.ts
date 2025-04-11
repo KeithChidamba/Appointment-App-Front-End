@@ -20,24 +20,22 @@ export class TimeslotsForDayComponent {
   Timeslots:Timeslot[]=[];
   ngOnInit(){
       this.Timeslots=this.WeekDays[this.CurrentWeekIndex].TimeSlots;
-      if(this.isDailyViewMode){
-        AppointmentsTimetableComponent.OnUpdateViewIndex.subscribe((index)=>{
-          this.CurrentWeekIndex = index;
-          this.Timeslots=this.WeekDays[this.CurrentWeekIndex].TimeSlots;
-          console.log(index);
-        });
-      }
-
-
+      AppointmentsTimetableComponent.OnUpdateViewIndex.subscribe((index)=>{
+        if(this.isDailyViewMode){this.CurrentWeekIndex = index;}
+        this.Timeslots=this.WeekDays[this.CurrentWeekIndex].TimeSlots;
+      });
   }
   
    BookAppointment( BlankSlot:Timeslot){
     if(this.auth.loggedIn())return;
+    console.log(BlankSlot);
     this.apmnt.RecieveAppointmentToBook(BlankSlot);
     this.router.navigate(['/AppointmentForm']);
-}
- EditAppointment( AppointmentSlot:Timeslot){
-  if(!this.auth.loggedIn())return;
+ }
+ EditAppointment(AppointmentSlot:Timeslot)
+ {
+  if(!this.auth.loggedIn())return;  
+  console.log(AppointmentSlot);
   this.apmnt.RecieveAppointmentToBook(AppointmentSlot);
   this.router.navigate(['/AppointmentInfo']);
 }

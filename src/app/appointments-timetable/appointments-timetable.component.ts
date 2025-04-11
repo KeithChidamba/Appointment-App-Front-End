@@ -59,6 +59,7 @@ UpdateViewIndex(){
   UpdateView(ChangeView: boolean) {
     this.ShowDaliyOnly = ChangeView;
     this.NumberOfDaysToShow = this.ShowDaliyOnly ? 1 : 7;
+    this.WeekDaysToShow = this.NumberOfDaysToShow === 1 ? this.WeekDays.slice(0, this.NumberOfDaysToShow):this.WeekDays;
     const WidthOfTable = this.NumberOfDaysToShow === 1 ? 30 : 80;
     const widthOfHeaders = this.NumberOfDaysToShow === 1 ? '15' : '10';
     this.TimeslotSeperatorStyle = this.NumberOfDaysToShow === 1 ? 'width:15vw;' : 'width:10vw;';
@@ -67,6 +68,7 @@ UpdateViewIndex(){
     this.TimeslotWidthStyle = `width:${WidthOfTable}vw;`;
     this.NavigateBacktext = this.ShowDaliyOnly ? 'Previous Day' : 'Previous Week';
     this.NavigateForwardtext = this.ShowDaliyOnly ? 'Next Day' : 'Next Week';
+    this.UpdateViewIndex();
   }
 
   async NavigateTable(GoForward: boolean) {
