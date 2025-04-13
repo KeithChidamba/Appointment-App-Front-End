@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { AppointmentInfoRoutingModule } from './appointment-info-routing.module';
 import { AppointmentInfoComponent } from './appointment-info.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -11,7 +12,7 @@ import { AppointmentInfoComponent } from './appointment-info.component';
   ],
   imports: [
     CommonModule,
-    AppointmentInfoRoutingModule
+    AppointmentInfoRoutingModule,ReactiveFormsModule
   ]
 })
 export class AppointmentInfoModule { }

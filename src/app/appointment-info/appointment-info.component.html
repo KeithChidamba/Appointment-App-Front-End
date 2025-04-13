@@ -15,7 +15,7 @@
             <label> Appointment
                 <select (change)="SetAppointmentType($event)">
                     <option >-- Select --</option>
-                    <option *ngFor="let a of availableAppointments.List" value="a.AppointmentName">a.AppointmentName</option>
+                    <option *ngFor="let a of AppointmentTypeList" value="a.AppointmentName">a.AppointmentName</option>
                 </select>
             </label>    
         </div>
@@ -24,6 +24,5 @@
             <button class="signupbtn" (click)="SaveChanges()">Save</button>
         </div>
     </form>
-  
-    </form>
+
 </div>

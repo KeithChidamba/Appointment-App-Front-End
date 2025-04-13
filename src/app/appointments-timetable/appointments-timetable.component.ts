@@ -38,7 +38,7 @@ HeaderWidthStyle:string='';
 HeadingWidthStyle:string='';
 TimeslotSeperatorStyle:string='';
 TimeSlotsMargin:string='';
-public static OnUpdateViewIndex: Subject<number> = new Subject<number>();
+
 ngOnInit() {
   this.appointment.GetPendingAppointments().subscribe(
     (data)=>{
@@ -54,7 +54,7 @@ ngOnInit() {
     this.UpdateView(!this.ShowDaliyOnly);
   }
 UpdateViewIndex(){
-  AppointmentsTimetableComponent.OnUpdateViewIndex.next(this.DayViewIndex);
+  this.appointment.OnUpdateViewIndex.next(this.DayViewIndex);
 }
   UpdateView(ChangeView: boolean) {
     this.ShowDaliyOnly = ChangeView;

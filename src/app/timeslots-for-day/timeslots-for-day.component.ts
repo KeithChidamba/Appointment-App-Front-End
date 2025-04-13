@@ -4,12 +4,17 @@ import { Timeslot } from '../models/Timeslot';
 import { Router } from '@angular/router';
 import { AppointmentService } from '../services/appointment.service';
 import { AuthService } from '../services/auth.service';
-import { AppointmentsTimetableComponent } from '../appointments-timetable/appointments-timetable.component';
-
+import { CommonModule } from '@angular/common'; // <-- Needed for *ngIf, *ngFor, etc.
+import { RouterModule } from '@angular/router';
 @Component({
   selector: 'app-timeslots-for-day',
   templateUrl: './timeslots-for-day.component.html',
-  styleUrls: ['./timeslots-for-day.component.css']
+  styleUrls: ['./timeslots-for-day.component.css'],
+  standalone: true,
+  imports: [
+    CommonModule, 
+    RouterModule 
+  ],
 })
 
 export class TimeslotsForDayComponent {
@@ -20,7 +25,7 @@ export class TimeslotsForDayComponent {
   Timeslots:Timeslot[]=[];
   ngOnInit(){
       this.Timeslots=this.WeekDays[this.CurrentWeekIndex].TimeSlots;
-      AppointmentsTimetableComponent.OnUpdateViewIndex.subscribe((index)=>{
+      this.apmnt.OnUpdateViewIndex.subscribe((index)=>{
         if(this.isDailyViewMode){this.CurrentWeekIndex = index;}
         this.Timeslots=this.WeekDays[this.CurrentWeekIndex].TimeSlots;
       });
@@ -28,14 +33,12 @@ export class TimeslotsForDayComponent {
   
    BookAppointment( BlankSlot:Timeslot){
     if(this.auth.loggedIn())return;
-    console.log(BlankSlot);
     this.apmnt.RecieveAppointmentToBook(BlankSlot);
     this.router.navigate(['/AppointmentForm']);
  }
  EditAppointment(AppointmentSlot:Timeslot)
  {
   if(!this.auth.loggedIn())return;  
-  console.log(AppointmentSlot);
   this.apmnt.RecieveAppointmentToBook(AppointmentSlot);
   this.router.navigate(['/AppointmentInfo']);
 }

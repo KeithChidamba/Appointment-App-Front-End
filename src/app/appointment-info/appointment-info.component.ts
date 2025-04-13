@@ -14,6 +14,7 @@ import { Validators, FormBuilder } from '@angular/forms';
 })
 export class AppointmentInfoComponent {
 constructor(private fb: FormBuilder,private apmnt:AppointmentService, public dp:DatePipe){}
+AppointmentTypeList:AppointmentTypeData[]=AvailableAppointments.List.slice(0,3);
 TimeslotForEditing:Timeslot = new Timeslot('','','',null,0);
 AppointmentInfo:Appointment = new Appointment(0,"","","","","","","",0,"",0,0,0);
 ValidAppointment:boolean=false;

@@ -5,7 +5,6 @@
        (click)="BookAppointment(slot)">
     <span>Open</span>
   </div>
-
   <div *ngIf="!slot.isBlank" [style]="slot.StylingSlotHeight" 
        class="Appointment-filled"
        (click)="EditAppointment(slot)">

@@ -14,6 +14,7 @@ import { AppointmentTypeData } from '../models/AppointmentTypeInfo';
 })
 export class AppointmentFormComponent {
   constructor(private fb: FormBuilder,private apmnt:AppointmentService, public dp:DatePipe){}
+  AppointmentTypeList:AppointmentTypeData[]=AvailableAppointments.List;
   BlankSlotForBooking:Timeslot = new Timeslot('','','',null,0);
   AppointmentInfo:Appointment = new Appointment(0,"","","","","","","",0,"",0,0,0);
   ValidAppointment:boolean=false;

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Appointment } from '../models/Appointment';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { catchError,Observable,throwError} from 'rxjs';
+import { catchError,Observable,Subject,throwError} from 'rxjs';
 import { Business } from '../models/Business';
 import { AuthService } from './auth.service';
 import { Timeslot } from '../models/Timeslot';
@@ -15,6 +15,7 @@ export class AppointmentService {
   //domain = "http://localhost:8080";
   CurrentBusinessOwner: Business = new Business(0, '', '', '', '', '', '');
   CurrentStoredTimeslot:Timeslot = new Timeslot('','','',null,0);
+  public OnUpdateViewIndex: Subject<number> = new Subject<number>();
   public RecieveData(data:Business){
     this.CurrentBusinessOwner = new Business(0, data.BusinessName, data.OwnerFirstName, data.OwnerLastName, data.OwnerEmail, data.OwnerPhone, data.OwnerPassword);
   }

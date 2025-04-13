@@ -3,15 +3,16 @@ import { CommonModule } from '@angular/common';
 import { AppointmentsTimetableRoutingModule } from './appointments-timetable-routing.module';
 import { AppointmentsTimetableComponent } from './appointments-timetable.component';
 import { TimeslotsForDayComponent } from '../timeslots-for-day/timeslots-for-day.component';
-
+import { RouterModule } from '@angular/router';
 
 @NgModule({
   declarations: [
-    AppointmentsTimetableComponent,TimeslotsForDayComponent
+    AppointmentsTimetableComponent
   ],
   imports: [
     CommonModule,
-    AppointmentsTimetableRoutingModule
+    AppointmentsTimetableRoutingModule,RouterModule
+    ,TimeslotsForDayComponent  
   ]
 })
 export class AppointmentsTimetableModule { }
