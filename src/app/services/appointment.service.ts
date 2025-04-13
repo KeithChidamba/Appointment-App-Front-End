@@ -24,7 +24,17 @@ export class AppointmentService {
   public RecieveAppointmentToBook(Slot:Timeslot){
     this.CurrentStoredTimeslot=Slot;
   }
-  
+  public GetNewDateFromTime(Time: string): Date {
+    let date = new Date();
+    let [hours, minutes] = Time.split(":").map(Number);
+    date.setHours(hours, minutes, 0, 0);
+    return date;
+  }
+  UpdateAppointment(UpdatedAppointment:Appointment){
+    return this.http.patch<Appointment>(this.domain+'/api/appointments/update',UpdatedAppointment).pipe(  
+      catchError(this.handleError)
+    )
+  }
   GetPendingAppointments():Observable<Appointment[]>{
     const headers = this.auth.createAuthenticationHeaders();
     return this.http.get<Appointment[]>(this.domain+'/api/appointments/getPending',{headers}).pipe(  

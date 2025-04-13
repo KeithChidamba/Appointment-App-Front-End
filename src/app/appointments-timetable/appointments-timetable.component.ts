@@ -32,7 +32,7 @@ ShowDaliyOnly:boolean = false;
 NavigateForwardtext:string='';
 NavigateBacktext:string='';
 CurrentWeekDates:Date[] = [];
-StartOfWorkday:Date = this.GetNewDateFromTime('08:00');
+StartOfWorkday:Date = this.appointment.GetNewDateFromTime('08:00');
 public TimeslotWidthStyle:string='';
 HeaderWidthStyle:string='';
 HeadingWidthStyle:string='';
@@ -113,12 +113,6 @@ UpdateViewIndex(){
     if (this.ShowDaliyOnly) this.DayViewIndex = 6;
     this.UpdateView(SwitchToDaily);
   }
-  GetNewDateFromTime(Time: string): Date {
-    let date = new Date();
-    let [hours, minutes] = Time.split(":").map(Number);
-    date.setHours(hours, minutes, 0, 0);
-    return date;
-  }
   
   async SetTimeTable(isNextWeek: boolean) {
     let numBlankDays = 0;
@@ -132,7 +126,7 @@ UpdateViewIndex(){
     }
     for (let i = numBlankDays; i < this.CurrentWeekDates.length; i++) {
       const dateKey = this.CurrentWeekDates[i].toLocaleDateString();
-      let earliestSlot = this.GetNewDateFromTime('08:00');
+      let earliestSlot = this.appointment.GetNewDateFromTime('08:00');
       let hasAppointments = false;
   
       while (
@@ -141,7 +135,7 @@ UpdateViewIndex(){
       ) {
         hasAppointments = true;
         const appointment = this.ScheduledAppointments[appointmentIndex];
-        const startTime = this.GetNewDateFromTime(appointment.AppointmentTime);
+        const startTime = this.appointment.GetNewDateFromTime(appointment.AppointmentTime);
         let durationMinutes = appointment.AppointmentDurationInMinutes;
         if (startTime.getTime() > earliestSlot.getTime()) {
           const gapInMinutes = (startTime.getTime() - earliestSlot.getTime()) / 60000;
@@ -161,9 +155,9 @@ UpdateViewIndex(){
         earliestSlot = endTime;
         appointmentIndex++;
       }
-      if (!hasAppointments || this.GetNewDateFromTime('22:00').getTime() - earliestSlot.getTime() > 0) {
+      if (!hasAppointments || this.appointment.GetNewDateFromTime('22:00').getTime() - earliestSlot.getTime() > 0) {
         await this.AddBlankTimeSlot(
-          (this.GetNewDateFromTime('22:00').getTime() - earliestSlot.getTime()) / 60000,
+          (this.appointment.GetNewDateFromTime('22:00').getTime() - earliestSlot.getTime()) / 60000,
           earliestSlot.toLocaleTimeString(),
           '22:00',
           i
