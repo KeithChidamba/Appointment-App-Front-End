@@ -35,6 +35,11 @@ export class AppointmentService {
       catchError(this.handleError)
     )
   }
+  CreateAppointment(NewAppointment:Appointment){
+    return this.http.post<Appointment>(this.domain+'/api/appointments/add',NewAppointment).pipe(  
+      catchError(this.handleError)
+    )
+  }
   GetPendingAppointments():Observable<Appointment[]>{
     const headers = this.auth.createAuthenticationHeaders();
     return this.http.get<Appointment[]>(this.domain+'/api/appointments/getPending',{headers}).pipe(  
