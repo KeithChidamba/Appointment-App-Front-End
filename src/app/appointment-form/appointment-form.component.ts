@@ -4,7 +4,6 @@ import { Timeslot } from '../models/Timeslot';
 import { Appointment } from '../models/Appointment';
 import { DatePipe } from '@angular/common';
 import { FormBuilder,Validators } from '@angular/forms';
-import { AvailableAppointments } from '../interfaces/AvailableAppointments';
 import { AppointmentTypeData } from '../models/AppointmentTypeInfo';
 
 @Component({
@@ -13,8 +12,7 @@ import { AppointmentTypeData } from '../models/AppointmentTypeInfo';
   styleUrls: ['./appointment-form.component.css']
 })
 export class AppointmentFormComponent {
-  constructor(private fb: FormBuilder,private apmnt:AppointmentService, public dp:DatePipe){}
-  AppointmentTypeList:AppointmentTypeData[]=AvailableAppointments.List;
+  constructor(private fb: FormBuilder,public apmnt:AppointmentService, public dp:DatePipe){}
   BlankSlotForBooking:Timeslot = new Timeslot('','','',null,0);
   AppointmentInfo:Appointment = new Appointment(0,"","","","","","","",0,"",0,0,0);
   ValidAppointment:boolean=false;
@@ -49,7 +47,7 @@ export class AppointmentFormComponent {
     });
     ngOnInit(){
       this.BlankSlotForBooking = this.apmnt.GetCurrentSlot();
-      console.log(this.BlankSlotForBooking);
+
   }
 
    SetAppointmentType(event:Event){
@@ -57,7 +55,7 @@ export class AppointmentFormComponent {
      this.AppointmentInfo.AppointmentName = (event.target as HTMLInputElement).value;
      this.AppointmentInfo.AppointmentDate = this.dp.transform(this.Bookingform.get('AppointmentDate')?.value as string,"yyyy-MM-dd") as string;
      this.AppointmentInfo.AppointmentTime = this.dp.transform(this.Bookingform.get('AppointmentTime')?.value as string,"HH:mm") as string;
-      var selectedAppointment:AppointmentTypeData = AvailableAppointments.List[AvailableAppointments.List.findIndex(a =>a.AppointmentName 
+      var selectedAppointment:AppointmentTypeData = this.apmnt.AvailableAppointments[this.apmnt.AvailableAppointments.findIndex(a =>a.AppointmentName 
        === this.AppointmentInfo.AppointmentName)];
      this.AppointmentInfo.AppointmentPrice = selectedAppointment.AppointmentPrice;
      this.AppointmentInfo.AppointmentDurationInMinutes = selectedAppointment.AppointmentDurationInMinutes;
@@ -86,6 +84,7 @@ export class AppointmentFormComponent {
       this.AppointmentInfo.ClientEmail = this.Bookingform.get('ClientEmail')?.value as string;
       this.AppointmentInfo.ClientPhone = this.Bookingform.get('ClientPhone')?.value as string;
       this.apmnt.UpdateAppointment(this.AppointmentInfo);
+      this.apmnt.OnBlankSlotSelected.next(false);
       }
   }
 }

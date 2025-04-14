@@ -4,7 +4,6 @@ import { Timeslot } from '../models/Timeslot';
 import { DatePipe } from '@angular/common';
 import { Appointment } from '../models/Appointment';
 import { AppointmentTypeData } from '../models/AppointmentTypeInfo';
-import { AvailableAppointments } from '../interfaces/AvailableAppointments';
 import { Validators, FormBuilder } from '@angular/forms';
 
 @Component({
@@ -13,8 +12,7 @@ import { Validators, FormBuilder } from '@angular/forms';
   styleUrls: ['./appointment-info.component.css']
 })
 export class AppointmentInfoComponent {
-constructor(private fb: FormBuilder,private apmnt:AppointmentService, public dp:DatePipe){}
-AppointmentTypeList:AppointmentTypeData[]=AvailableAppointments.List.slice(0,3);
+constructor(private fb: FormBuilder,public apmnt:AppointmentService, public dp:DatePipe){}
 TimeslotForEditing:Timeslot = new Timeslot('','','',null,0);
 AppointmentInfo:Appointment = new Appointment(0,"","","","","","","",0,"",0,0,0);
 ValidAppointment:boolean=false;
@@ -26,19 +24,22 @@ EarliestDate:string = this.dp.transform(new Date(),"yyyy-MM-dd") as string;
     });
 ngOnInit(){
   this.TimeslotForEditing = this.apmnt.GetCurrentSlot();
-  console.log(this.TimeslotForEditing);
+  this.AppointmentInfo = this.TimeslotForEditing.CurrentAppointment as Appointment;
 }
 
    SetAppointmentType(event:Event){
+    console.log((event.target as HTMLInputElement).value);
+    console.log(this.AppointmentInfo.AppointmentID)
      this.AppointmentInfo.AppointmentName = (event.target as HTMLInputElement).value;
      this.AppointmentInfo.AppointmentDate = this.dp.transform(this.Editingform.get('AppointmentDate')?.value as string,"yyyy-MM-dd") as string;
-     this.AppointmentInfo.AppointmentTime = this.dp.transform(this.Editingform.get('AppointmentTime')?.value as string,"HH:mm") as string;
-      var selectedAppointment:AppointmentTypeData = AvailableAppointments.List[AvailableAppointments.List.findIndex(a =>a.AppointmentName 
+     this.AppointmentInfo.AppointmentTime = this.dp.transform(
+      this.apmnt.GetNewDateFromTime(this.Editingform.get('AppointmentTime')?.value as string),"HH:mm") as string;
+      var selectedAppointment:AppointmentTypeData = this.apmnt.AvailableAppointments[this.apmnt.AvailableAppointments.findIndex(a =>a.AppointmentName 
        === this.AppointmentInfo.AppointmentName)];
      this.AppointmentInfo.AppointmentPrice = selectedAppointment.AppointmentPrice;
      this.AppointmentInfo.AppointmentDurationInMinutes = selectedAppointment.AppointmentDurationInMinutes;
-     var SlotLengthMinutes = this.apmnt.GetNewDateFromTime(this.TimeslotForEditing.EndTime).getTime()
-             -this.apmnt.GetNewDateFromTime(this.TimeslotForEditing.StartTime).getTime();
+     var SlotLengthMinutes = Math.abs(this.apmnt.GetNewDateFromTime(this.TimeslotForEditing.EndTime).getTime()
+             -this.apmnt.GetNewDateFromTime(this.TimeslotForEditing.StartTime).getTime())/60000;
      if(this.AppointmentInfo.AppointmentDurationInMinutes > SlotLengthMinutes){
          //cant book appointment here
          console.log("invalid lendth for appointment: "+SlotLengthMinutes);
@@ -58,6 +59,7 @@ ngOnInit(){
       if(this.ValidAppointment)
       {
           this.apmnt.UpdateAppointment(this.AppointmentInfo);
+          this.apmnt.OnAppointmentSelected.next(false);
       }
   }
 }

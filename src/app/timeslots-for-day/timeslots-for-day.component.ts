@@ -33,12 +33,14 @@ export class TimeslotsForDayComponent {
   
    BookAppointment( BlankSlot:Timeslot){
     if(this.auth.loggedIn())return;
+    this.apmnt.OnBlankSlotSelected.next(true);
     this.apmnt.RecieveAppointmentToBook(BlankSlot);
     this.router.navigate(['/AppointmentForm']);
  }
  EditAppointment(AppointmentSlot:Timeslot)
  {
   if(!this.auth.loggedIn())return;  
+  this.apmnt.OnAppointmentSelected.next(true);
   this.apmnt.RecieveAppointmentToBook(AppointmentSlot);
   this.router.navigate(['/AppointmentInfo']);
 }

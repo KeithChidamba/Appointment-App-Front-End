@@ -12,8 +12,8 @@ import { Business } from '../models/Business';
 export class AuthService {
   constructor(public http:HttpClient,public dp:DatePipe) { }
   private helper = new JwtHelperService();
-  private domain = "https://nail-appointment-backend-production.up.railway.app";
-  //private domain = "http://localhost:8080";
+  //private domain = "https://nail-appointment-backend-production.up.railway.app";
+  private domain = "http://localhost:8080";
   public isLoggedIn = false;
   private authToken:string ='';
 
