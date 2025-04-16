@@ -79,6 +79,7 @@ export class RegisterComponent {
           (data)=>{
             this.err = false;
             this.success=true;
+            this.auth.OnAuth.next(false);
             setTimeout(()=>{
                 this.router.navigate([''])
             },500)

@@ -19,11 +19,14 @@ export class AppointmentService {
   public OnUpdateViewIndex: Subject<number> = new Subject<number>();
   public OnAppointmentSelected: Subject<boolean> = new Subject<boolean>();
   public OnBlankSlotSelected: Subject<boolean> = new Subject<boolean>();
+  public isBusinessOwner=false;
   AvailableAppointments:AppointmentTypeData[]=[new AppointmentTypeData("Gel",45,120),
     new AppointmentTypeData("Manicure" ,60,200),
     new AppointmentTypeData("Pedicure",55,300) ];
+
   public RecieveData(data:Business){
     this.CurrentBusinessOwner = new Business(0, data.BusinessName, data.OwnerFirstName, data.OwnerLastName, data.OwnerEmail, data.OwnerPhone, data.OwnerPassword);
+    this.isBusinessOwner=true;
   }
   public GetCurrentSlot():Timeslot{
     return this.CurrentStoredTimeslot;
@@ -38,9 +41,8 @@ export class AppointmentService {
     return date;
   }
   UpdateAppointment(UpdatedAppointment:Appointment){
-    console.log(UpdatedAppointment);
     const headers = this.auth.createAuthenticationHeaders();
-    return this.http.patch<string>(this.domain+'/api/appointments/update',UpdatedAppointment,{headers}).pipe(  
+    return this.http.post<string>(this.domain+'/api/appointments/update',UpdatedAppointment,{headers}).pipe(  
       catchError(this.handleError)
     )
   }
@@ -49,9 +51,15 @@ export class AppointmentService {
       catchError(this.handleError)
     )
   }
-  GetPendingAppointments():Observable<Appointment[]>{
+  GetAppointmentsForClients():Observable<Appointment[]>{
     const headers = this.auth.createAuthenticationHeaders();
-    return this.http.get<Appointment[]>(this.domain+'/api/appointments/getPending',{headers}).pipe(  
+    return this.http.get<Appointment[]>(this.domain+`/api/appointments/GetForClientView/${this.CurrentBusinessOwner.BusinessName}`,{headers}).pipe(  
+                catchError(this.handleError)
+              )
+  }
+  GetAppointmentsForBusiness():Observable<Appointment[]>{
+    const headers = this.auth.createAuthenticationHeaders();
+    return this.http.get<Appointment[]>(this.domain+`/api/appointments/GetForBusinessView`,{headers}).pipe(  
                 catchError(this.handleError)
               )
   }

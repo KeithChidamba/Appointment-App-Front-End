@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders, HttpEvent} from "@angular/common/http";
-import { catchError,throwError} from 'rxjs';
+import { catchError,Subject,throwError} from 'rxjs';
 import { JwtHelperService } from "node_modules/@auth0/angular-jwt";
 import { DatePipe } from '@angular/common';
 import { LoginData } from '../interfaces/LoginData';
@@ -16,11 +16,17 @@ export class AuthService {
   private domain = "http://localhost:8080";
   public isLoggedIn = false;
   private authToken:string ='';
+  private RegisterBusinessData:Business=new Business(0,' ','','', '','','' );
+  public OnAuth: Subject<boolean> = new Subject<boolean>();
 
      register(BusinessOwner:Business) {
+      this.RegisterBusinessData=BusinessOwner;
           return this.http.post<Business>(this.domain+ '/api/auth/register',BusinessOwner).pipe(  
             catchError(this.handleError)
           )
+    }
+    getBusinessDataFromRegister(){
+      return this.RegisterBusinessData;
     }
      login(BusinessOwner:LoginData) {
           return this.http.post<string>(this.domain+ '/api/auth/login',BusinessOwner).pipe(  

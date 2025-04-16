@@ -15,29 +15,25 @@ import { AppointmentService } from '../services/appointment.service';
 export class ProfileComponent {
   constructor(public auth:AuthService, private apntment:AppointmentService) {}
   BusinessOwner: Business = new Business(0, '', '', '', '', '', '');
-  LoginData:LoginData={
-    BusinessName: '',
-    OwnerPassword:''
-    ,OwnerEmail: ' '};
-loaded = false;
-
 ngOnInit() {
-  if(!this.loaded){
-    this.auth.getBusinessData().subscribe(
-      (BusinessData)=>{
-        this.load_user_info(BusinessData)
-      }
-    )
-  }
+      this.auth.OnAuth.subscribe((AuthByLogin)=>{
+          if(AuthByLogin){
+            this.auth.getBusinessData().subscribe(
+              (info)=>{
+                this.load_user_info(info);
+              })
+          }else{
+            this.load_user_info(this.auth.getBusinessDataFromRegister());
+          }
+      })
 }
 load_user_info(info:Business){
-    this.BusinessOwner.BusinessName = info.BusinessName;
-    this.BusinessOwner.OwnerFirstName = info.OwnerFirstName;
-    this.BusinessOwner.OwnerLastName = info.OwnerLastName;
-    this.BusinessOwner.OwnerEmail = info.OwnerEmail;
-    this.BusinessOwner.OwnerPhone = info.OwnerPhone;
-    this.BusinessOwner.OwnerPassword = info.OwnerPassword;
-    this.loaded = true;
-    this.apntment.RecieveData(this.BusinessOwner);
+  this.BusinessOwner.BusinessName = info.BusinessName;
+  this.BusinessOwner.OwnerFirstName = info.OwnerFirstName;
+  this.BusinessOwner.OwnerLastName = info.OwnerLastName;
+  this.BusinessOwner.OwnerEmail = info.OwnerEmail;
+  this.BusinessOwner.OwnerPhone = info.OwnerPhone;
+  this.BusinessOwner.OwnerPassword = info.OwnerPassword;
+  this.apntment.RecieveData(this.BusinessOwner);
 }
 }

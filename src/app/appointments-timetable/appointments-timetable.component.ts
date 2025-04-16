@@ -5,7 +5,6 @@ import { WeekDaySchedule } from '../models/WeekDaySchedule';
 import { NavigationIndex } from '../models/NavigationIndex';
 import { DatePipe } from '@angular/common';
 import { Timeslot } from '../models/Timeslot';
-import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-appointments-timetable',
@@ -40,14 +39,18 @@ TimeslotSeperatorStyle:string='';
 TimeSlotsMargin:string='';
 
 ngOnInit() {
-  this.appointment.GetPendingAppointments().subscribe(
-    (data)=>{
-      this.ScheduledAppointments = data;
-      this.CurrentAppointmentIndex = 0;
-      this.CurrentWeekNavigationIndex = 0;
-      this.NumFutureWeeksAhead = 0;
-      this.LoadWeeklyTable(new Date(),true);
-  });
+  if(this.appointment.isBusinessOwner){
+    this.appointment.GetAppointmentsForBusiness().subscribe(
+      (data)=>{
+        this.ScheduledAppointments = data;  this.LoadWeeklyTable(new Date(),true);
+    });
+  }else{
+    this.appointment.GetAppointmentsForClients().subscribe(
+      (data)=>{
+        this.ScheduledAppointments = data;  this.LoadWeeklyTable(new Date(),true);
+    });
+  }
+
 }
  
   SwitchView() {
