@@ -5,6 +5,7 @@ import { WeekDaySchedule } from '../models/WeekDaySchedule';
 import { NavigationIndex } from '../models/NavigationIndex';
 import { DatePipe } from '@angular/common';
 import { Timeslot } from '../models/Timeslot';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-appointments-timetable',
@@ -12,7 +13,7 @@ import { Timeslot } from '../models/Timeslot';
   styleUrls: ['./appointments-timetable.component.css']
 })
 export class AppointmentsTimetableComponent {
-constructor(private appointment: AppointmentService, public dp:DatePipe){}
+constructor(private appointment: AppointmentService, public dp:DatePipe, private auth:AuthService){}
 NumberOfDaysToShow:number = 7;
 ScheduledAppointments: Appointment[]=[];
 WeekDays:WeekDaySchedule[]=[new WeekDaySchedule(true),new WeekDaySchedule(true),new WeekDaySchedule(true),
@@ -39,7 +40,7 @@ TimeslotSeperatorStyle:string='';
 TimeSlotsMargin:string='';
 
 ngOnInit() {
-  if(this.appointment.isBusinessOwner){
+  if(this.auth.loggedIn()){
     this.appointment.GetAppointmentsForBusiness().subscribe(
       (data)=>{
         this.ScheduledAppointments = data;  this.LoadWeeklyTable(new Date(),true);
@@ -47,7 +48,12 @@ ngOnInit() {
   }else{
     this.appointment.GetAppointmentsForClients().subscribe(
       (data)=>{
-        this.ScheduledAppointments = data;  this.LoadWeeklyTable(new Date(),true);
+        this.ScheduledAppointments = data;  
+        this.CurrentAppointmentIndex = 0;
+        this.CurrentWeekNavigationIndex = 0;
+        this.NumFutureWeeksAhead = 0;
+        console.log(this.ScheduledAppointments);
+        this.LoadWeeklyTable(new Date(),true);
     });
   }
 
@@ -110,11 +116,12 @@ UpdateViewIndex(){
     this.NumFutureWeeksAhead--;
     this.CurrentWeekNavigationIndex--;
     this.CurrentAppointmentIndex = this.NavigationHistory[this.CurrentWeekNavigationIndex].weekStartIndex;
-    this.NavigationHistory.splice(this.CurrentWeekNavigationIndex + 1);
+    this.NavigationHistory.splice(this.CurrentWeekNavigationIndex + 1,1);
     const FirstDayOfCurrentWeek = this.CurrentWeekDates[0];
     await this.LoadWeeklyTable(new Date(FirstDayOfCurrentWeek.setDate(FirstDayOfCurrentWeek.getDate() - 7)), false);
     if (this.ShowDaliyOnly) this.DayViewIndex = 6;
     this.UpdateView(SwitchToDaily);
+    console.log(this.NavigationHistory);
   }
   
   async SetTimeTable(isNextWeek: boolean) {
@@ -170,6 +177,7 @@ UpdateViewIndex(){
     if (isNextWeek) {
       const newWeek = new NavigationIndex(this.CurrentAppointmentIndex, appointmentIndex);
       this.NavigationHistory.push(newWeek);
+      console.log(this.NavigationHistory);
     }
   }
   

@@ -14,20 +14,13 @@ export class AppointmentService {
   constructor(public http:HttpClient, private auth:AuthService) { }
   //domain = "https://nail-appointment-backend-production.up.railway.app";
   domain = "http://localhost:8080";
-  CurrentBusinessOwner: Business = new Business(0, '', '', '', '', '', '');
   CurrentStoredTimeslot:Timeslot = new Timeslot('','','',null,0);
   public OnUpdateViewIndex: Subject<number> = new Subject<number>();
   public OnAppointmentSelected: Subject<boolean> = new Subject<boolean>();
   public OnBlankSlotSelected: Subject<boolean> = new Subject<boolean>();
-  public isBusinessOwner=false;
   AvailableAppointments:AppointmentTypeData[]=[new AppointmentTypeData("Gel",45,120),
     new AppointmentTypeData("Manicure" ,60,200),
     new AppointmentTypeData("Pedicure",55,300) ];
-
-  public RecieveData(data:Business){
-    this.CurrentBusinessOwner = new Business(0, data.BusinessName, data.OwnerFirstName, data.OwnerLastName, data.OwnerEmail, data.OwnerPhone, data.OwnerPassword);
-    this.isBusinessOwner=true;
-  }
   public GetCurrentSlot():Timeslot{
     return this.CurrentStoredTimeslot;
   }
@@ -47,13 +40,14 @@ export class AppointmentService {
     )
   }
   CreateAppointment(NewAppointment:Appointment){
-    return this.http.post<Appointment>(this.domain+'/api/appointments/add',NewAppointment).pipe(  
+    const headers = this.auth.createAuthenticationHeaders();
+    return this.http.post<Appointment>(this.domain+'/api/appointments/add',NewAppointment,{headers}).pipe(  
       catchError(this.handleError)
     )
   }
   GetAppointmentsForClients():Observable<Appointment[]>{
     const headers = this.auth.createAuthenticationHeaders();
-    return this.http.get<Appointment[]>(this.domain+`/api/appointments/GetForClientView/${this.CurrentBusinessOwner.BusinessName}`,{headers}).pipe(  
+    return this.http.get<Appointment[]>(this.domain+`/api/appointments/GetForClientView/${'Loysell'}`,{headers}).pipe(  
                 catchError(this.handleError)
               )
   }

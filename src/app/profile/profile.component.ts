@@ -16,16 +16,7 @@ export class ProfileComponent {
   constructor(public auth:AuthService, private apntment:AppointmentService) {}
   BusinessOwner: Business = new Business(0, '', '', '', '', '', '');
 ngOnInit() {
-      this.auth.OnAuth.subscribe((AuthByLogin)=>{
-          if(AuthByLogin){
-            this.auth.getBusinessData().subscribe(
-              (info)=>{
-                this.load_user_info(info);
-              })
-          }else{
-            this.load_user_info(this.auth.getBusinessDataFromRegister());
-          }
-      })
+    this.load_user_info(this.auth.BusinessData);
 }
 load_user_info(info:Business){
   this.BusinessOwner.BusinessName = info.BusinessName;
@@ -34,6 +25,5 @@ load_user_info(info:Business){
   this.BusinessOwner.OwnerEmail = info.OwnerEmail;
   this.BusinessOwner.OwnerPhone = info.OwnerPhone;
   this.BusinessOwner.OwnerPassword = info.OwnerPassword;
-  this.apntment.RecieveData(this.BusinessOwner);
 }
 }

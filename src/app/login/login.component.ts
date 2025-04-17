@@ -51,10 +51,10 @@ export class LoginComponent {
         this.BusinessOwner.OwnerEmail = this.Loginform.get('OwnerEmail')?.value;
         this.auth.login(this.BusinessOwner).subscribe(
           (data)=>{
-            this.auth.OnAuth.next(true);
             this.auth.StoreToken(data);
             this.auth.LoadToken();
             this.auth.loggedIn();
+            this.auth.GetBusinessData();
             this.success = true;
             this.err = false;
             setTimeout(()=>{

@@ -16,17 +16,19 @@ export class AuthService {
   private domain = "http://localhost:8080";
   public isLoggedIn = false;
   private authToken:string ='';
-  private RegisterBusinessData:Business=new Business(0,' ','','', '','','' );
-  public OnAuth: Subject<boolean> = new Subject<boolean>();
+  public BusinessData:Business=new Business(0,' ','','', '','','' );
 
+GetBusinessData(){
+    this.getBusinessData().subscribe(
+      (info)=>{
+        this.BusinessData=info;
+      })
+}
      register(BusinessOwner:Business) {
-      this.RegisterBusinessData=BusinessOwner;
+      this.BusinessData=BusinessOwner;
           return this.http.post<Business>(this.domain+ '/api/auth/register',BusinessOwner).pipe(  
             catchError(this.handleError)
           )
-    }
-    getBusinessDataFromRegister(){
-      return this.RegisterBusinessData;
     }
      login(BusinessOwner:LoginData) {
           return this.http.post<string>(this.domain+ '/api/auth/login',BusinessOwner).pipe(  
@@ -41,7 +43,7 @@ export class AuthService {
       });
       return headers;
     }
-    getBusinessData(){
+    private getBusinessData(){
       const headers = this.createAuthenticationHeaders();
       return this.http.get<Business>(this.domain+ '/api/auth/GetBusinessData',{headers}).pipe(  
         catchError(this.handleError)
