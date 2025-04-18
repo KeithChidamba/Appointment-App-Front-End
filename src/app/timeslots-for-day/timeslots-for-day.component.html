@@ -8,7 +8,10 @@
   <div *ngIf="!slot.isBlank" [style]="slot.StylingSlotHeight" 
        class="Appointment-filled"
        (click)="EditAppointment(slot)">
-    <span>{{ slot.CurrentAppointment?.AppointmentName }}</span>
+    <span *ngIf="auth.loggedIn()">{{ slot.CurrentAppointment?.AppointmentName }}
+      <span *ngIf="slot.CurrentAppointment?.isConfirmed==0">Pending</span>
+    </span>
+    <span *ngIf="!auth.loggedIn()">Booked</span>
   </div>
 
 </div>

@@ -1,46 +1,87 @@
-.header{
-    color:darksalmon;
-    font-size: 45px;
-    margin-top: 8%;
-  }
-.welcome-text{
-width: 40%;
-font-size: 35px;
-color:rgb(80, 88, 72);
-margin:auto;
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(to bottom right, #f7c9a2, #ffffff);
 }
-.Option_btns{
-  background-color: #04AA6D;
+
+.container {
+  padding: 20px;
+  text-align: center;
+}
+
+.header {
+  color: rgb(235, 120, 81);
+  font-size: 3rem;
+  margin-top: 5%;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+.welcome-text {
+  max-width: 700px;
+  margin: 2rem auto;
+  font-size: 1.2rem;
+  color: #444;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 20px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.option-btn {
+  background-color: #886578;
   color: white;
   border: none;
   cursor: pointer;
-  width: 90px;
+  width: 120px;
   height: 40px;
-  border-radius: 15px;
-  margin-left:10px;
+  border-radius: 20px;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
 }
-ul {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
-    background-color: rgb(255, 255, 255);
-    margin-right: 200px;
-  }
-  li {
-    float: right;
-    margin-right: 5px;
-  }
-  
-  li a {
-    display: block;
-    color: rgb(0, 0, 0);
-    text-align: center;
-    padding: 14px 16px;
-    text-decoration: none;
+
+.option-btn:hover {
+  background-color: #f34076;
+}
+
+.search-bar {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+.input-field {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  font-size: 1rem;
+  width: 100%;
+  max-width: 300px;
+  margin: 0 auto;
+}
+
+/* Responsive layout */
+@media (min-width: 768px) {
+  .search-bar {
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
   }
 
-  /* Change the link color to #111 (black) on hover */
-  li a:hover {
-    background-color: rgb(202, 198, 198);
+  .input-field {
+    margin: 0;
+    margin-right: 10px;
   }
+}

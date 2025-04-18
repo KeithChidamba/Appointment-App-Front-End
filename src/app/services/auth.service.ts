@@ -1,27 +1,30 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse, HttpHeaders, HttpEvent} from "@angular/common/http";
+import { HttpClient, HttpErrorResponse, HttpHeaders} from "@angular/common/http";
 import { catchError,Subject,throwError} from 'rxjs';
 import { JwtHelperService } from "node_modules/@auth0/angular-jwt";
 import { DatePipe } from '@angular/common';
 import { LoginData } from '../interfaces/LoginData';
 import { Business } from '../models/Business';
+import { Router } from 'node_modules/@angular/router';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  constructor(public http:HttpClient,public dp:DatePipe) { }
+  constructor(public http:HttpClient,public dp:DatePipe,private router:Router) { }
   private helper = new JwtHelperService();
   //private domain = "https://nail-appointment-backend-production.up.railway.app";
   private domain = "http://localhost:8080";
   public isLoggedIn = false;
   private authToken:string ='';
   public BusinessData:Business=new Business(0,' ','','', '','','' );
+  public OnLogout: Subject<void> = new Subject<void>();
 
 GetBusinessData(){
     this.getBusinessData().subscribe(
       (info)=>{
         this.BusinessData=info;
+        this.router.navigate(['/Profile'])
       })
 }
      register(BusinessOwner:Business) {
@@ -61,6 +64,7 @@ GetBusinessData(){
     Logout(){
         localStorage.clear();
         this.authToken = '';
+        this.OnLogout.next();
     }
     loggedIn(){
       this.LoadToken();

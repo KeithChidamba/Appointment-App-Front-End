@@ -3,6 +3,7 @@ import { Validators,FormBuilder } from "node_modules/@angular/forms";
 import { AuthService } from "../services/auth.service";
 import { Router } from 'node_modules/@angular/router';
 import { Business } from '../models/Business';
+import { AppointmentService } from '../services/appointment.service';
 
 @Component({
   selector: 'app-register',
@@ -13,7 +14,7 @@ import { Business } from '../models/Business';
   providedIn: 'root'
 })
 export class RegisterComponent {
-  constructor(private fb: FormBuilder,public auth:AuthService,private router:Router) { } 
+  constructor(private apmt: AppointmentService,private fb: FormBuilder,public auth:AuthService,private router:Router) { } 
   errorAlert='';
   checkingValidity =false;
   err = false;
@@ -77,11 +78,10 @@ export class RegisterComponent {
         }
         this.auth.register(this.BusinessOwner).subscribe(
           (data)=>{
+            this.apmt.BusinessSelected=true;
             this.err = false;
             this.success=true;
-            setTimeout(()=>{
-                this.router.navigate([''])
-            },500)
+            this.router.navigate(['/Profile'])
           },
           (error)=>{
               this.err = true;

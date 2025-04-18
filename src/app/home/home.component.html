@@ -1,8 +1,27 @@
-
-<div>
-    <h1 align="center" class="header">Organise your day, one task at a time</h1>
+<body>
+  <div class="container">
+    <h1 class="header">Schedulink</h1>
     <div class="welcome-text">
-      <p>Welcome to Go-Note, your reliable, on the go To-Do list App. please<button routerLink="/login" class="Option_btns">Sign in</button>
-      or <button routerLink="/register" class="Option_btns">Register</button> to get started.</p>
+      <p>Welcome, how can we help you?</p>
+      
+      <div class="option">
+        <span>I want to check my business schedule</span>
+        <button routerLink="/login" class="option-btn">Sign in</button>
+      </div>
+  
+      <div class="option">
+        <span>I'd like to sign up to keep my schedule logged with you guys.</span>
+        <button routerLink="/register" class="option-btn">Register</button>
+      </div>
+  
+      <div class="option">
+        <span>I want to book an appointment with a specific business</span>
+        <div class="search-bar">
+          <input class="input-field" type="text" placeholder="Enter business name" [(ngModel)]="Businessname" name="search"><br>
+          <button (click)="SearchForBusiness()" class="option-btn">Search</button>
+        </div>
+      </div>
     </div>
-</div>
+  </div>
+  
+</body>

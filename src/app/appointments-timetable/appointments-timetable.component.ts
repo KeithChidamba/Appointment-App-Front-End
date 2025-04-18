@@ -13,7 +13,7 @@ import { AuthService } from '../services/auth.service';
   styleUrls: ['./appointments-timetable.component.css']
 })
 export class AppointmentsTimetableComponent {
-constructor(private appointment: AppointmentService, public dp:DatePipe, private auth:AuthService){}
+constructor(private apmt: AppointmentService, public dp:DatePipe, private auth:AuthService){}
 NumberOfDaysToShow:number = 7;
 ScheduledAppointments: Appointment[]=[];
 WeekDays:WeekDaySchedule[]=[new WeekDaySchedule(true),new WeekDaySchedule(true),new WeekDaySchedule(true),
@@ -32,7 +32,7 @@ ShowDaliyOnly:boolean = false;
 NavigateForwardtext:string='';
 NavigateBacktext:string='';
 CurrentWeekDates:Date[] = [];
-StartOfWorkday:Date = this.appointment.GetNewDateFromTime('08:00');
+StartOfWorkday:Date = this.apmt.GetNewDateFromTime('08:00');
 public TimeslotWidthStyle:string='';
 HeaderWidthStyle:string='';
 HeadingWidthStyle:string='';
@@ -41,19 +41,14 @@ TimeSlotsMargin:string='';
 
 ngOnInit() {
   if(this.auth.loggedIn()){
-    this.appointment.GetAppointmentsForBusiness().subscribe(
+    this.apmt.GetAppointmentsForBusiness().subscribe(
       (data)=>{
         this.ScheduledAppointments = data;  this.LoadWeeklyTable(new Date(),true);
     });
   }else{
-    this.appointment.GetAppointmentsForClients().subscribe(
+    this.apmt.GetAppointmentsForClients().subscribe(
       (data)=>{
-        this.ScheduledAppointments = data;  
-        this.CurrentAppointmentIndex = 0;
-        this.CurrentWeekNavigationIndex = 0;
-        this.NumFutureWeeksAhead = 0;
-        console.log(this.ScheduledAppointments);
-        this.LoadWeeklyTable(new Date(),true);
+        this.ScheduledAppointments = data;  this.LoadWeeklyTable(new Date(),true);
     });
   }
 
@@ -63,7 +58,7 @@ ngOnInit() {
     this.UpdateView(!this.ShowDaliyOnly);
   }
 UpdateViewIndex(){
-  this.appointment.OnUpdateViewIndex.next(this.DayViewIndex);
+  this.apmt.OnUpdateViewIndex.next(this.DayViewIndex);
 }
   UpdateView(ChangeView: boolean) {
     this.ShowDaliyOnly = ChangeView;
@@ -121,7 +116,6 @@ UpdateViewIndex(){
     await this.LoadWeeklyTable(new Date(FirstDayOfCurrentWeek.setDate(FirstDayOfCurrentWeek.getDate() - 7)), false);
     if (this.ShowDaliyOnly) this.DayViewIndex = 6;
     this.UpdateView(SwitchToDaily);
-    console.log(this.NavigationHistory);
   }
   
   async SetTimeTable(isNextWeek: boolean) {
@@ -136,7 +130,7 @@ UpdateViewIndex(){
     }
     for (let i = numBlankDays; i < this.CurrentWeekDates.length; i++) {
       const dateKey = this.CurrentWeekDates[i].toLocaleDateString();
-      let earliestSlot = this.appointment.GetNewDateFromTime('08:00');
+      let earliestSlot = this.apmt.GetNewDateFromTime('08:00');
       let hasAppointments = false;
   
       while (
@@ -145,7 +139,7 @@ UpdateViewIndex(){
       ) {
         hasAppointments = true;
         const appointment = this.ScheduledAppointments[appointmentIndex];
-        const startTime = this.appointment.GetNewDateFromTime(appointment.AppointmentTime);
+        const startTime = this.apmt.GetNewDateFromTime(appointment.AppointmentTime);
         let durationMinutes = appointment.AppointmentDurationInMinutes;
         if (startTime.getTime() > earliestSlot.getTime()) {
           const gapInMinutes = (startTime.getTime() - earliestSlot.getTime()) / 60000;
@@ -165,9 +159,9 @@ UpdateViewIndex(){
         earliestSlot = endTime;
         appointmentIndex++;
       }
-      if (!hasAppointments || this.appointment.GetNewDateFromTime('22:00').getTime() - earliestSlot.getTime() > 0) {
+      if (!hasAppointments || this.apmt.GetNewDateFromTime('22:00').getTime() - earliestSlot.getTime() > 0) {
         await this.AddBlankTimeSlot(
-          (this.appointment.GetNewDateFromTime('22:00').getTime() - earliestSlot.getTime()) / 60000,
+          (this.apmt.GetNewDateFromTime('22:00').getTime() - earliestSlot.getTime()) / 60000,
           earliestSlot.toLocaleTimeString(),
           '22:00',
           i
@@ -177,7 +171,6 @@ UpdateViewIndex(){
     if (isNextWeek) {
       const newWeek = new NavigationIndex(this.CurrentAppointmentIndex, appointmentIndex);
       this.NavigationHistory.push(newWeek);
-      console.log(this.NavigationHistory);
     }
   }
   
@@ -198,10 +191,11 @@ UpdateViewIndex(){
       t.TimeSlots = [];
       t.isEmpty = true;
     });
-    
     for (let i = 0; i < 7; i++) {
-      this.CurrentWeekDates.push(new Date(new Date().setDate(FirstDayOfNewWeek.getDate() + i)));
-    }
+      const date = new Date(FirstDayOfNewWeek); 
+      date.setDate(date.getDate() + i);
+      this.CurrentWeekDates.push(date);
+    }    
     this.UpdateView(true);
     await this.SetTimeTable(LoadNextWeek);
 

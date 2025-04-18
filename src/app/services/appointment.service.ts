@@ -18,6 +18,8 @@ export class AppointmentService {
   public OnUpdateViewIndex: Subject<number> = new Subject<number>();
   public OnAppointmentSelected: Subject<boolean> = new Subject<boolean>();
   public OnBlankSlotSelected: Subject<boolean> = new Subject<boolean>();
+  public SelectedBusinessForClientView='';
+  public BusinessSelected = false;
   AvailableAppointments:AppointmentTypeData[]=[new AppointmentTypeData("Gel",45,120),
     new AppointmentTypeData("Manicure" ,60,200),
     new AppointmentTypeData("Pedicure",55,300) ];
@@ -47,7 +49,7 @@ export class AppointmentService {
   }
   GetAppointmentsForClients():Observable<Appointment[]>{
     const headers = this.auth.createAuthenticationHeaders();
-    return this.http.get<Appointment[]>(this.domain+`/api/appointments/GetForClientView/${'Loysell'}`,{headers}).pipe(  
+    return this.http.get<Appointment[]>(this.domain+`/api/appointments/GetForClientView/${this.SelectedBusinessForClientView}`,{headers}).pipe(  
                 catchError(this.handleError)
               )
   }

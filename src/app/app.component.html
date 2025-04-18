@@ -1,7 +1,7 @@
 <div>
   <ul>
     <li>
-       <a href="" routerLink="/AppointmentsTimetable" [routerLinkActive]="['active']"  [routerLinkActiveOptions]="{exact:true}">Timetable</a>
+       <a href="" *ngIf="this.apmt.BusinessSelected" routerLink="/AppointmentsTimetable" [routerLinkActive]="['active']"  [routerLinkActiveOptions]="{exact:true}">Timetable</a>
       </li>
         <li *ngIf="auth.loggedIn()">
           <a href="" routerLink="/Profile"[routerLinkActive]="['active']"  [routerLinkActiveOptions]="{exact:true}"  >Profile</a>

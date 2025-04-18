@@ -1,9 +1,8 @@
-import { Component,Injectable } from '@angular/core';
+import { Component } from '@angular/core';
 import { Validators,FormBuilder } from "node_modules/@angular/forms";
 import { AuthService } from "../services/auth.service";
-import { Router } from 'node_modules/@angular/router';
-import { LoginData } from '../interfaces/LoginData';
-import { Business } from '../models/Business';
+import { LoginData }from '../interfaces/LoginData';
+import { AppointmentService } from '../services/appointment.service';
 
 @Component({
   selector: 'app-login',
@@ -12,7 +11,7 @@ import { Business } from '../models/Business';
 })
 export class LoginComponent {
 
-  constructor(private fb: FormBuilder,public auth:AuthService,private router:Router) { } 
+  constructor(private apmt: AppointmentService,private fb: FormBuilder,public auth:AuthService) { } 
   err = false;
   success = false;
   checkingValidity =false;
@@ -54,13 +53,10 @@ export class LoginComponent {
             this.auth.StoreToken(data);
             this.auth.LoadToken();
             this.auth.loggedIn();
+            this.apmt.BusinessSelected=true;
             this.auth.GetBusinessData();
             this.success = true;
             this.err = false;
-            setTimeout(()=>{
-                this.router.navigate(['/profile'])
-            },500)
-            this.router 
           },
           (error)=>{
               this.err = true;
