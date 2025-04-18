@@ -43,12 +43,14 @@ ngOnInit() {
   if(this.auth.loggedIn()){
     this.apmt.GetAppointmentsForBusiness().subscribe(
       (data)=>{
-        this.ScheduledAppointments = data;  this.LoadWeeklyTable(new Date(),true);
+        
+        this.ScheduledAppointments = data; console.log(this.ScheduledAppointments); this.LoadWeeklyTable(new Date(),true);
     });
   }else{
     this.apmt.GetAppointmentsForClients().subscribe(
       (data)=>{
-        this.ScheduledAppointments = data;  this.LoadWeeklyTable(new Date(),true);
+
+        this.ScheduledAppointments = data; console.log(this.ScheduledAppointments); this.LoadWeeklyTable(new Date(),true);
     });
   }
 

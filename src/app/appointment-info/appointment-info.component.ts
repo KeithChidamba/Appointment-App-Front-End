@@ -19,19 +19,19 @@ ValidAppointment:boolean=false;
 LatestBookingTime:string = "21:00";
 EarliestDate:string = this.dp.transform(new Date(),"yyyy-MM-dd") as string;
     Editingform = this.fb.group({
-      AppointmentTime : [''],
+      AppointmentTime : ['',Validators.required],
       AppointmentDate : ['']
     });
 ngOnInit(){
   this.TimeslotForEditing = this.apmnt.GetCurrentSlot();
   this.AppointmentInfo = this.TimeslotForEditing.CurrentAppointment as Appointment;
 }
-
    SetAppointmentType(event:Event){
+    if(!this.Editingform.get('AppointmentTime')?.valid || !this.Editingform.get('AppointmentDate')?.valid)return;
     console.log((event.target as HTMLInputElement).value);
     console.log(this.AppointmentInfo.AppointmentID)
      this.AppointmentInfo.AppointmentName = (event.target as HTMLInputElement).value;
-     this.AppointmentInfo.AppointmentDate = this.dp.transform(this.Editingform.get('AppointmentDate')?.value as string,"yyyy-MM-dd") as string;
+     this.AppointmentInfo.AppointmentDate = this.dp.transform(this.Editingform.get('AppointmentDate')?.value, 'M/d/yyyy') as string;
      this.AppointmentInfo.AppointmentTime = this.dp.transform(
       this.apmnt.GetNewDateFromTime(this.Editingform.get('AppointmentTime')?.value as string),"HH:mm") as string;
       var selectedAppointment:AppointmentTypeData = this.apmnt.AvailableAppointments[this.apmnt.AvailableAppointments.findIndex(a =>a.AppointmentName 
@@ -58,7 +58,9 @@ ngOnInit(){
   SaveChanges(){
       if(this.ValidAppointment)
       {
-          this.apmnt.UpdateAppointment(this.AppointmentInfo);
+          this.apmnt.UpdateAppointment(this.AppointmentInfo).subscribe((res)=>{
+            console.log(res);
+          });
           this.apmnt.OnAppointmentSelected.next(false);
       }
   }

@@ -11,7 +11,7 @@
             <label> Appointment Date</label>
             <input class="InputField" [min]="EarliestDate" type="date" name="date" formControlName="AppointmentDate" required>
               <label> Appointment Time </label>
-            <input class="InputField" type="time" name="time" formControlName="AppointmentTime" required [min]="TimeslotForEditing.StartTime" [max]="LatestBookingTime">
+            <input class="InputField" type="time" name="time" formControlName="AppointmentTime" [min]="TimeslotForEditing.StartTime" [max]="LatestBookingTime">
             <label> Appointment
                 <select (change)="SetAppointmentType($event)">
                     <option >-- Select --</option>
