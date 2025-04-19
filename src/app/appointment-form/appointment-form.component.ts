@@ -83,7 +83,9 @@ export class AppointmentFormComponent {
       this.AppointmentInfo.ClientLastName = this.Bookingform.get('ClientLastName')?.value as string;
       this.AppointmentInfo.ClientEmail = this.Bookingform.get('ClientEmail')?.value as string;
       this.AppointmentInfo.ClientPhone = this.Bookingform.get('ClientPhone')?.value as string;
-      this.apmnt.UpdateAppointment(this.AppointmentInfo);
+      this.apmnt.CreateAppointment(this.AppointmentInfo).subscribe((res)=>{
+        console.log(res);
+      });
       this.apmnt.OnBlankSlotSelected.next(false);
       }
   }
