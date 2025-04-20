@@ -5,11 +5,17 @@
     z-index: 2;
     position: absolute;
 }
+body {
+    margin: 0;
+    padding: 0;
+    overflow: auto;
+  }
+
 .Whole-Table{
+    width: 1200px;
+    padding: 20px;
     position: relative;
     height: auto;
-    width: fit-content;
-    margin-bottom: 7%;
     align-items: center;
     justify-content: center;
 }
@@ -22,7 +28,7 @@
     border-radius: 5px;
 }
 .Timeslot-Hour{
-    border: 3px solid #3f3e3e;
+    border: 2.5px solid #3f3e3e;
     height: 50px;
     display: flex;
     align-items: center;
@@ -37,14 +43,13 @@
     display: flex;
     flex-direction: column;
     position: absolute;
-    margin-top:4vw;
+    margin-top:50px;
 }
 .Timetable-Settings{
     display: flex;
     flex-direction: row;
-    gap: 0.5vw;
+    gap: 10px;
     position:relative;
-    margin-top:0.25vw;
     background-color: #9dc2b7;
     align-items: center;
     justify-content: center;
@@ -73,7 +78,7 @@ span{
     font-size: clamp(1.2rem,5vw + 1rem);
 }
 .Weekdays{
-    height: 4vw;
+    height: 50px;
     text-align: center;
     align-items: center;
     font-weight: bold;

@@ -37,7 +37,6 @@ export class AppointmentService {
   }
   UpdateAppointment(UpdatedAppointment:Appointment){
     const headers = this.auth.createAuthenticationHeaders();
-    console.log(UpdatedAppointment);
     return this.http.post<string>(this.domain+'/api/appointments/update',UpdatedAppointment,{headers}).pipe(  
       catchError(this.handleError)
     )

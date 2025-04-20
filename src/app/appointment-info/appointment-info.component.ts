@@ -15,8 +15,10 @@ export class AppointmentInfoComponent {
 constructor(private fb: FormBuilder,public apmnt:AppointmentService, public dp:DatePipe){}
 TimeslotForEditing:Timeslot = new Timeslot('','','',null,0);
 AppointmentInfo:Appointment = new Appointment(0,"","","","","","","",0,"",0,0,0);
+LatestBookingTime = "21:00";
 ValidAppointment:boolean=false;
-LatestBookingTime:string = "21:00";
+EditingAppointment=false;
+CurrentViewText ="Edit Appointment";
 EarliestDate:string = this.dp.transform(new Date(),"yyyy-MM-dd") as string;
     Editingform = this.fb.group({
       AppointmentTime : ['',Validators.required],
@@ -26,14 +28,20 @@ ngOnInit(){
   this.TimeslotForEditing = this.apmnt.GetCurrentSlot();
   this.AppointmentInfo = this.TimeslotForEditing.CurrentAppointment as Appointment;
 }
+    OpenEditView(){
+      this.EditingAppointment=!this.EditingAppointment;
+      this.CurrentViewText =(this.EditingAppointment)?"View Appointment":"Edit Appointment";
+    }
    SetAppointmentType(event:Event){
     if(!this.Editingform.get('AppointmentTime')?.valid || !this.Editingform.get('AppointmentDate')?.valid)return;
-    console.log((event.target as HTMLInputElement).value);
-    console.log(this.AppointmentInfo.AppointmentID)
+    var FormattedDateString = this.dp.transform(this.Editingform.get('AppointmentDate')?.value, 'M/d/yyyy') as string;
+    var FormattedTimeString  = this.dp.transform(this.apmnt.GetNewDateFromTime(this.Editingform.get('AppointmentTime')?.value as string),"HH:mm") as string;
+    var timeFromInput = this.apmnt.GetNewDateFromTime(FormattedTimeString);
+    if(this.apmnt.GetNewDateFromTime(this.LatestBookingTime).getTime() < timeFromInput.getTime() 
+    || timeFromInput.getTime() < this.apmnt.GetNewDateFromTime(this.TimeslotForEditing.StartTime).getTime() )
      this.AppointmentInfo.AppointmentName = (event.target as HTMLInputElement).value;
-     this.AppointmentInfo.AppointmentDate = this.dp.transform(this.Editingform.get('AppointmentDate')?.value, 'M/d/yyyy') as string;
-     this.AppointmentInfo.AppointmentTime = this.dp.transform(
-      this.apmnt.GetNewDateFromTime(this.Editingform.get('AppointmentTime')?.value as string),"HH:mm") as string;
+     this.AppointmentInfo.AppointmentDate = FormattedDateString;
+     this.AppointmentInfo.AppointmentTime = FormattedTimeString;
       var selectedAppointment:AppointmentTypeData = this.apmnt.AvailableAppointments[this.apmnt.AvailableAppointments.findIndex(a =>a.AppointmentName 
        === this.AppointmentInfo.AppointmentName)];
      this.AppointmentInfo.AppointmentPrice = selectedAppointment.AppointmentPrice;

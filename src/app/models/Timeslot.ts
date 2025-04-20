@@ -10,12 +10,12 @@ export class Timeslot{
         public  CurrentAppointment:Appointment | null,
         public  SizeMulitplier:number){this.SetStyling()}
         SetStyling(){
-            var BaseSlotHeight = 50;
-            var SlotHeight = parseFloat(this.SizeMulitplier.toFixed(2))*BaseSlotHeight;
+            var BaseSlotHeight = 53.5;
+            var SlotHeight = (parseFloat(this.SizeMulitplier.toFixed(2))*BaseSlotHeight);
             this.isBlank = (this.CurrentAppointment==null);
             var ColorIntensity = 0;
             if(this.isBlank){//only color appointment blocks
-                this.StylingSlotHeight =  `height:${SlotHeight}px;`;return;
+                this.StylingSlotHeight = `cursor:pointer;height:${SlotHeight}px;`;return;
             }
             var ColorSpectrum:string[]= ["rgb(255, 255, 0)","rgb(255, 165, 0)","rgb(212, 79, 30)","rgb(143, 4, 4)","rgb(0, 0, 0)","rgb(131, 64, 255)"];
             var TextColorSpectrum:string[] = ["black", "black", "white", "white", "white"];

@@ -1,28 +1,37 @@
-<div>
+<div class="appointment-container" *ngIf="!EditingAppointment">
     <h1>{{ AppointmentInfo.AppointmentName }} Appointment for {{ AppointmentInfo.ClientFirstName }} {{ AppointmentInfo.ClientLastName }}</h1>
-    <span>Appointment duration: {{ AppointmentInfo.AppointmentDurationInMinutes }}</span>
-    <span>Current appointment time: {{ AppointmentInfo.AppointmentTime }}</span>
-    <span>Current appointment date: {{ AppointmentInfo.AppointmentDate }}</span>
-</div>
-<div>
-    <span>You can the edit following fields </span>
-    <form [formGroup]="Editingform"  style="border:1px solid #ccc">
-        <div>      
-            <label> Appointment Date</label>
-            <input class="InputField" [min]="EarliestDate" type="date" name="date" formControlName="AppointmentDate" required>
-              <label> Appointment Time </label>
-            <input class="InputField" type="time" name="time" formControlName="AppointmentTime" [min]="TimeslotForEditing.StartTime" [max]="LatestBookingTime">
-            <label> Appointment
-                <select (change)="SetAppointmentType($event)">
-                    <option >-- Select --</option>
-                    <option *ngFor="let a of apmnt.AvailableAppointments" [value]="a.AppointmentName">{{ a.AppointmentName }}</option>
-                </select>
-            </label>    
-        </div>
-        <div class="clearfix">
-            <button type="button" class="cancelbtn" routerLink="/AppointmentsTimetable">Cancel</button>
-            <button class="signupbtn" [disabled]="!ValidAppointment" (click)="SaveChanges()">Save</button>
-        </div>
+    <div class="appointment-details">
+      <p><strong>Duration:</strong> {{ AppointmentInfo.AppointmentDurationInMinutes }} minutes</p>
+      <p><strong>Time:</strong> {{ AppointmentInfo.AppointmentTime }}</p>
+      <p><strong>Date:</strong> {{ AppointmentInfo.AppointmentDate }}</p>
+    </div>
+  </div>
+  
+  <button class="toggle-edit-btn" (click)="OpenEditView()">{{ CurrentViewText }}</button>
+  
+  <div class="edit-form-container" *ngIf="EditingAppointment">
+    <p class="form-instruction">You can edit the following fields:</p>
+    <form [formGroup]="Editingform" class="edit-form">
+      <div class="form-group">
+        <label for="appointmentDate">Appointment Date</label>
+        <input class="input-field" [min]="EarliestDate" type="date" id="appointmentDate" name="date" formControlName="AppointmentDate" required>
+  
+        <label for="appointmentTime">Appointment Time</label>
+        <input class="input-field" type="time" id="appointmentTime" name="time" formControlName="AppointmentTime">
+  
+        <label for="appointmentType">Appointment Type</label>
+        <select id="appointmentType" class="input-field" (change)="SetAppointmentType($event)">
+          <option>-- Select --</option>
+          <option *ngFor="let a of apmnt.AvailableAppointments" [value]="a.AppointmentName">
+            {{ a.AppointmentName }}
+          </option>
+        </select>
+      </div>
+  
+      <div class="form-buttons">
+        <button type="button" class="cancel-btn" routerLink="/AppointmentsTimetable">Cancel</button>
+        <button class="save-btn" [disabled]="!ValidAppointment" (click)="SaveChanges()">Save</button>
+      </div>
     </form>
-
-</div>
+  </div>
+  

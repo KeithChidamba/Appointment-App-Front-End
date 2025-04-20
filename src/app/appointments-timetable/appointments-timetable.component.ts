@@ -32,7 +32,7 @@ ShowDaliyOnly:boolean = false;
 NavigateForwardtext:string='';
 NavigateBacktext:string='';
 CurrentWeekDates:Date[] = [];
-StartOfWorkday:Date = this.apmt.GetNewDateFromTime('08:00');
+StartOfWorkday:Date = this.apmt.GetNewDateFromTime('07:00');
 public TimeslotWidthStyle:string='';
 HeaderWidthStyle:string='';
 HeadingWidthStyle:string='';
@@ -66,12 +66,11 @@ UpdateViewIndex(){
     this.ShowDaliyOnly = ChangeView;
     this.NumberOfDaysToShow = this.ShowDaliyOnly ? 1 : 7;
     this.WeekDaysToShow = this.NumberOfDaysToShow === 1 ? this.WeekDays.slice(0, this.NumberOfDaysToShow):this.WeekDays;
-    const WidthOfTable = this.NumberOfDaysToShow === 1 ? 30 : 80;
-    const widthOfHeaders = this.NumberOfDaysToShow === 1 ? '15' : '10';
-    this.TimeslotSeperatorStyle = this.NumberOfDaysToShow === 1 ? 'width:15vw;' : 'width:10vw;';
-    this.HeadingWidthStyle = this.NumberOfDaysToShow === 1 ? 'width:30vw;' : 'width:80vw;';
-    this.HeaderWidthStyle = `width:${widthOfHeaders}vw;`;
-    this.TimeslotWidthStyle = `width:${WidthOfTable}vw;`;
+    const widthOfHeaders = "150"//this.NumberOfDaysToShow === 1 ? '300' : '1000';
+    this.TimeslotSeperatorStyle = this.NumberOfDaysToShow === 1 ? 'width:150px;' : 'width:305px;';
+    this.HeadingWidthStyle = this.NumberOfDaysToShow === 1 ? 'width:300px;' : 'width:100%;';
+    this.HeaderWidthStyle = `width:${widthOfHeaders}px;`;
+    this.TimeslotWidthStyle = this.NumberOfDaysToShow === 1 ? 'width:305px;' : 'width:1225px;';
     this.NavigateBacktext = this.ShowDaliyOnly ? 'Previous Day' : 'Previous Week';
     this.NavigateForwardtext = this.ShowDaliyOnly ? 'Next Day' : 'Next Week';
     this.UpdateViewIndex();
@@ -126,7 +125,7 @@ UpdateViewIndex(){
     const firstDate = new Date(this.ScheduledAppointments[0].AppointmentDate);
     for (let i = 0; i < this.CurrentWeekDates.length; i++) {
       if (firstDate.getTime() > this.CurrentWeekDates[i].getTime()) {
-        await this.AddBlankTimeSlot(840, '08:00', '21:00', i);
+        await this.AddBlankTimeSlot(780, '08:00', '21:00', i);
         numBlankDays++;
       } else break;
     }
@@ -161,11 +160,11 @@ UpdateViewIndex(){
         earliestSlot = endTime;
         appointmentIndex++;
       }
-      if (!hasAppointments || this.apmt.GetNewDateFromTime('22:00').getTime() - earliestSlot.getTime() > 0) {
+      if (!hasAppointments || this.apmt.GetNewDateFromTime('21:00').getTime() - earliestSlot.getTime() > 0) {
         await this.AddBlankTimeSlot(
-          (this.apmt.GetNewDateFromTime('22:00').getTime() - earliestSlot.getTime()) / 60000,
+          (this.apmt.GetNewDateFromTime('21:00').getTime() - earliestSlot.getTime()) / 60000,
           earliestSlot.toLocaleTimeString(),
-          '22:00',
+          '21:00',
           i
         );
       }
