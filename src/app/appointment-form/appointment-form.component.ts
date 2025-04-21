@@ -13,7 +13,7 @@ import { AppointmentTypeData } from '../models/AppointmentTypeInfo';
 })
 export class AppointmentFormComponent {
   constructor(private fb: FormBuilder,public apmnt:AppointmentService, public dp:DatePipe){}
-  BlankSlotForBooking:Timeslot = new Timeslot('','','',null,0);
+  BlankSlotForBooking:Timeslot = new Timeslot('','',0,null,0);
   AppointmentInfo:Appointment = new Appointment(0,"","","","","","","",0,"",0,0,0);
   ValidAppointment:boolean=false;
   LatestBookingTime:string = "21:00";

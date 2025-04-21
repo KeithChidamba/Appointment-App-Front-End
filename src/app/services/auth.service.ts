@@ -68,16 +68,9 @@ GetBusinessData(){
     }
     loggedIn(){
       this.LoadToken();
-      let current_date = this.dp.transform((new Date),'MM/dd/yyyy h:mm:ss');
-      let token_date = this.helper.getTokenExpirationDate(this.authToken);
-      if(token_date!=undefined&&current_date!=null){
-            if(token_date.toDateString()>current_date){
-                this.isLoggedIn =true;
-            }else{
-              this.isLoggedIn =false;
-            }
-          }else return false;
-      return this.isLoggedIn
+      const currentDate = new Date();
+      const tokenDate = this.helper.getTokenExpirationDate(this.authToken);
+      return  (tokenDate instanceof Date)? this.isLoggedIn = tokenDate > currentDate : false;
     }
     private handleError(error: HttpErrorResponse) {
       if (error.status==426){

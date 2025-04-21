@@ -13,7 +13,7 @@ import { Validators, FormBuilder } from '@angular/forms';
 })
 export class AppointmentInfoComponent {
 constructor(private fb: FormBuilder,public apmnt:AppointmentService, public dp:DatePipe){}
-TimeslotForEditing:Timeslot = new Timeslot('','','',null,0);
+TimeslotForEditing:Timeslot = new Timeslot('','',0,null,0);
 AppointmentInfo:Appointment = new Appointment(0,"","","","","","","",0,"",0,0,0);
 LatestBookingTime = "21:00";
 ValidAppointment:boolean=false;
@@ -24,10 +24,11 @@ EarliestDate:string = this.dp.transform(new Date(),"yyyy-MM-dd") as string;
       AppointmentTime : ['',Validators.required],
       AppointmentDate : ['']
     });
-ngOnInit(){
-  this.TimeslotForEditing = this.apmnt.GetCurrentSlot();
-  this.AppointmentInfo = this.TimeslotForEditing.CurrentAppointment as Appointment;
-}
+    ngOnInit(){
+      this.TimeslotForEditing = this.apmnt.GetCurrentSlot();
+      this.AppointmentInfo = this.TimeslotForEditing.CurrentAppointment as Appointment;
+    }
+    
     OpenEditView(){
       this.EditingAppointment=!this.EditingAppointment;
       this.CurrentViewText =(this.EditingAppointment)?"View Appointment":"Edit Appointment";

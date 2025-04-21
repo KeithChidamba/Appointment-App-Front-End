@@ -152,7 +152,7 @@ UpdateViewIndex(){
           new Timeslot(
             appointment.AppointmentTime,
             endTime.toLocaleTimeString(),
-            appointment.AppointmentDate,
+            i,
             appointment,
             durationMinutes / 60
           )
@@ -179,7 +179,7 @@ UpdateViewIndex(){
     const newSlot = new Timeslot(
       StartTime,
       EndTime,
-      this.CurrentWeekDates[WeekdayIndex].toLocaleDateString(),
+      WeekdayIndex,
       null,
       SizeOfSlotinMinutes / 60
     );
