@@ -6,7 +6,7 @@
       <p><strong>Date:</strong> {{ AppointmentInfo.AppointmentDate }}</p>
     </div>
   </div>
-  
+  <button class="toggle-edit-btn" (click)="ReScheduleAppointment()">Re-schedule</button>
   <button class="toggle-edit-btn" (click)="OpenEditView()">{{ CurrentViewText }}</button>
   
   <div class="edit-form-container" *ngIf="EditingAppointment">

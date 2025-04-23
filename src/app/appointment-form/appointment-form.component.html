@@ -2,59 +2,59 @@
     <span>You can the edit following fields </span>
     <form [formGroup]="Bookingform"  style="border:1px solid #ccc">
         <div>      
-          <label> Appointment Date</label>
-          <input class="InputField" [min]="EarliestDate" type="date" name="date" formControlName="AppointmentDate" required>
-            <label> Appointment Time </label>
-          <input class="InputField" type="time" name="time" formControlName="AppointmentTime" required [min]="BlankSlotForBooking.StartTime" [max]="LatestBookingTime">
-          <label> Appointment
-              <select (change)="SetAppointmentType($event)">
-                  <option >-- Select --</option>
-                  <option *ngFor="let a of apmnt.AvailableAppointments" [value]="a.AppointmentName">{{ a.AppointmentName }}</option>
-              </select>
-          </label>    
-        <!--email-->
-      <div>
-        <label class="labels" for="email"><b>Businnes Email  </b></label>
-        <input class="InputField" type="text" placeholder="Enter Email" name="email" formControlName="ClientEmail" required>
-        <div *ngIf="checkingValidity">
-          <div class="alert" *ngIf="Bookingform.controls.ClientEmail.errors?.['email']">Invalid email</div>
-          <div class="alert" *ngIf="Bookingform.controls.ClientEmail.errors?.['required']">this field is required</div>
-          <div class="alert" *ngIf="Bookingform.controls.ClientEmail.errors?.['minlength']">Must be longer 5 characters</div>
-          <div class="alert" *ngIf="Bookingform.controls.ClientEmail.errors?.['maxlength']">Must be shorter than 30 cahracters</div>
+              <label> Appointment Date</label>
+              <input class="InputField" [min]="EarliestDate" type="date" name="date" formControlName="AppointmentDate" required>
+                <label> Appointment Time </label>
+              <input class="InputField" type="time" name="time" formControlName="AppointmentTime" required [min]="BlankSlotForBooking.StartTime" [max]="LatestBookingTime">
+              <label> Appointment
+                  <select (change)="SetAppointmentType($event)">
+                      <option >-- Select --</option>
+                      <option *ngFor="let a of apmnt.AvailableAppointments" [value]="a.AppointmentName">{{ a.AppointmentName }}</option>
+                  </select>
+              </label>    
+            <!--email-->
+          <div>
+            <label class="labels" for="email"><b>Businnes Email  </b></label>
+            <input class="InputField" type="text" placeholder="Enter Email" name="email" formControlName="ClientEmail" required>
+            <div *ngIf="checkingValidity">
+              <div class="alert" *ngIf="Bookingform.controls.ClientEmail.errors?.['email']">Invalid email</div>
+              <div class="alert" *ngIf="Bookingform.controls.ClientEmail.errors?.['required']">this field is required</div>
+              <div class="alert" *ngIf="Bookingform.controls.ClientEmail.errors?.['minlength']">Must be longer 5 characters</div>
+              <div class="alert" *ngIf="Bookingform.controls.ClientEmail.errors?.['maxlength']">Must be shorter than 30 cahracters</div>
+            </div>
+          </div>
+          <div><!--First Name-->
+              <label class="labels" for="psw"><b>First Name</b></label>
+              <input class="InputField" type="text" placeholder="Enter Name" name="firstname" formControlName="ClientFirstName"  required>
+              <div *ngIf="checkingValidity">
+                <div class="alert" *ngIf="Bookingform.controls.ClientFirstName.errors?.['required']">this field is required</div> 
+                <div class="alert" *ngIf="Bookingform.controls.ClientFirstName.errors?.['minlength']">Must be longer 8 </div>
+                <div class="alert" *ngIf="Bookingform.controls.ClientFirstName.errors?.['pattern']"> no special cahracters</div>
+                <div class="alert" *ngIf="Bookingform.controls.ClientFirstName.errors?.['maxlength']">Must be shorter than 35 cahracters long</div>
+              </div>     
+          </div>
+          <div><!--Last Name-->
+            <label class="labels" for="psw"><b>Last Name</b></label>
+            <input class="InputField" type="text" placeholder="Enter Name" name="last name" formControlName="ClientLastName"  required>
+            <div *ngIf="checkingValidity">
+              <div class="alert" *ngIf="Bookingform.controls.ClientLastName.errors?.['required']">this field is required</div> 
+              <div class="alert" *ngIf="Bookingform.controls.ClientLastName.errors?.['minlength']">Must be longer 8 </div>
+              <div class="alert" *ngIf="Bookingform.controls.ClientLastName.errors?.['pattern']"> no special cahracters</div>
+              <div class="alert" *ngIf="Bookingform.controls.ClientLastName.errors?.['maxlength']">Must be shorter than 35 cahracters long</div>
+            </div>     
         </div>
-      </div>
-      <div><!--First Name-->
-          <label class="labels" for="psw"><b>First Name</b></label>
-          <input class="InputField" type="text" placeholder="Enter Name" name="firstname" formControlName="ClientFirstName"  required>
-          <div *ngIf="checkingValidity">
-            <div class="alert" *ngIf="Bookingform.controls.ClientFirstName.errors?.['required']">this field is required</div> 
-            <div class="alert" *ngIf="Bookingform.controls.ClientFirstName.errors?.['minlength']">Must be longer 8 </div>
-            <div class="alert" *ngIf="Bookingform.controls.ClientFirstName.errors?.['pattern']"> no special cahracters</div>
-            <div class="alert" *ngIf="Bookingform.controls.ClientFirstName.errors?.['maxlength']">Must be shorter than 35 cahracters long</div>
-          </div>     
-      </div>
-      <div><!--Last Name-->
-        <label class="labels" for="psw"><b>Last Name</b></label>
-        <input class="InputField" type="text" placeholder="Enter Name" name="last name" formControlName="ClientLastName"  required>
-        <div *ngIf="checkingValidity">
-          <div class="alert" *ngIf="Bookingform.controls.ClientLastName.errors?.['required']">this field is required</div> 
-          <div class="alert" *ngIf="Bookingform.controls.ClientLastName.errors?.['minlength']">Must be longer 8 </div>
-          <div class="alert" *ngIf="Bookingform.controls.ClientLastName.errors?.['pattern']"> no special cahracters</div>
-          <div class="alert" *ngIf="Bookingform.controls.ClientLastName.errors?.['maxlength']">Must be shorter than 35 cahracters long</div>
-        </div>     
+        <div><!--Phone-->
+            <label class="labels" for="psw"><b>Phone</b></label>
+            <input class="InputField" type="text" placeholder="Enter Phone Number" name="psw" formControlName="ClientPhone"  required>
+            <div *ngIf="checkingValidity">
+              <div class="alert" *ngIf="Bookingform.controls.ClientPhone.errors?.['required']">this field is required</div> 
+              <div class="alert" *ngIf="Bookingform.controls.ClientPhone.errors?.['minlength']">Must be longer 8 </div>
+              <div class="alert" *ngIf="Bookingform.controls.ClientPhone.errors?.['pattern']"> no special cahracters</div>
+              <div class="alert" *ngIf="Bookingform.controls.ClientPhone.errors?.['maxlength']">Must be shorter than 35 cahracters long</div>
+            </div>      
+          </div>
+            <div class="clearfix">
+                <button type="button" class="cancelbtn" routerLink="/AppointmentsTimetable">Cancel</button>
+                <button class="signupbtn" (click)="SaveChanges()">Save</button>
+            </div>
     </div>
-    <div><!--Phone-->
-        <label class="labels" for="psw"><b>Phone</b></label>
-        <input class="InputField" type="text" placeholder="Enter Phone Number" name="psw" formControlName="ClientPhone"  required>
-        <div *ngIf="checkingValidity">
-          <div class="alert" *ngIf="Bookingform.controls.ClientPhone.errors?.['required']">this field is required</div> 
-          <div class="alert" *ngIf="Bookingform.controls.ClientPhone.errors?.['minlength']">Must be longer 8 </div>
-          <div class="alert" *ngIf="Bookingform.controls.ClientPhone.errors?.['pattern']"> no special cahracters</div>
-          <div class="alert" *ngIf="Bookingform.controls.ClientPhone.errors?.['maxlength']">Must be shorter than 35 cahracters long</div>
-        </div>      
-      </div>
-        <div class="clearfix">
-            <button type="button" class="cancelbtn" routerLink="/AppointmentsTimetable">Cancel</button>
-            <button class="signupbtn" (click)="SaveChanges()">Save</button>
-        </div>
-</div>

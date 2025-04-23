@@ -7,6 +7,7 @@ export class Timeslot{
         public StartTime:string,
         public  EndTime:string,
         public  dayIndexOfSlot:number,
+        public dateOfSlot:string,
         public  CurrentAppointment:Appointment | null,
         public  SizeMulitplier:number){this.SetStyling()}
         SetStyling(){

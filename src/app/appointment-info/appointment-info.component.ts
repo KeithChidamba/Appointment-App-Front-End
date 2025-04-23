@@ -5,6 +5,7 @@ import { DatePipe } from '@angular/common';
 import { Appointment } from '../models/Appointment';
 import { AppointmentTypeData } from '../models/AppointmentTypeInfo';
 import { Validators, FormBuilder } from '@angular/forms';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-appointment-info',
@@ -12,8 +13,8 @@ import { Validators, FormBuilder } from '@angular/forms';
   styleUrls: ['./appointment-info.component.css']
 })
 export class AppointmentInfoComponent {
-constructor(private fb: FormBuilder,public apmnt:AppointmentService, public dp:DatePipe){}
-TimeslotForEditing:Timeslot = new Timeslot('','',0,null,0);
+constructor(private fb: FormBuilder,public apmnt:AppointmentService, public dp:DatePipe, private router:Router){}
+TimeslotForEditing:Timeslot = new Timeslot('','',0,'',null,0);
 AppointmentInfo:Appointment = new Appointment(0,"","","","","","","",0,"",0,0,0);
 LatestBookingTime = "21:00";
 ValidAppointment:boolean=false;
@@ -28,7 +29,10 @@ EarliestDate:string = this.dp.transform(new Date(),"yyyy-MM-dd") as string;
       this.TimeslotForEditing = this.apmnt.GetCurrentSlot();
       this.AppointmentInfo = this.TimeslotForEditing.CurrentAppointment as Appointment;
     }
-    
+    ReScheduleAppointment(){
+        this.apmnt.isRescheduling=true;
+        this.router.navigate(['/AppointmentsTimetable']);
+    }
     OpenEditView(){
       this.EditingAppointment=!this.EditingAppointment;
       this.CurrentViewText =(this.EditingAppointment)?"View Appointment":"Edit Appointment";

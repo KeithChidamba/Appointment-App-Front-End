@@ -14,15 +14,24 @@ export class AppointmentService {
   constructor(public http:HttpClient, private auth:AuthService) { }
   //domain = "https://nail-appointment-backend-production.up.railway.app";
   domain = "http://localhost:8080";
-  CurrentStoredTimeslot:Timeslot = new Timeslot('','','',null,0);
+  CurrentStoredTimeslot:Timeslot = new Timeslot('','',0,'',null,0);
   public OnUpdateViewIndex: Subject<number> = new Subject<number>();
   public OnAppointmentSelected: Subject<boolean> = new Subject<boolean>();
   public OnBlankSlotSelected: Subject<boolean> = new Subject<boolean>();
+  public OnAppointmentReSchedule: Subject<Appointment> = new Subject<Appointment>();
   public SelectedBusinessForClientView='';
   public BusinessSelected = false;
+  isRescheduling = false;
   AvailableAppointments:AppointmentTypeData[]=[new AppointmentTypeData("Gel",45,120),
     new AppointmentTypeData("Manicure" ,60,200),
     new AppointmentTypeData("Pedicure",55,300) ];
+    public ValidSlotLength(slot:Timeslot,ApppointmentDuration:number){
+      let start = this.GetNewDateFromTime(slot.StartTime);
+      let end  = this.GetNewDateFromTime(slot.EndTime);
+      let minutes = end.getTime()-start.getTime();
+      if(minutes<=0){console.log("invalid times")};
+      return minutes<=ApppointmentDuration;
+    }
   public GetCurrentSlot():Timeslot{
     return this.CurrentStoredTimeslot;
   }

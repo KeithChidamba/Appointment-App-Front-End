@@ -13,7 +13,7 @@ import { AppointmentTypeData } from '../models/AppointmentTypeInfo';
 })
 export class AppointmentFormComponent {
   constructor(private fb: FormBuilder,public apmnt:AppointmentService, public dp:DatePipe){}
-  BlankSlotForBooking:Timeslot = new Timeslot('','',0,null,0);
+  BlankSlotForBooking:Timeslot = new Timeslot('','',0,'',null,0);
   AppointmentInfo:Appointment = new Appointment(0,"","","","","","","",0,"",0,0,0);
   ValidAppointment:boolean=false;
   LatestBookingTime:string = "21:00";
@@ -47,13 +47,12 @@ export class AppointmentFormComponent {
     });
     ngOnInit(){
       this.BlankSlotForBooking = this.apmnt.GetCurrentSlot();
-
   }
 
    SetAppointmentType(event:Event){
     this.checkingValidity = true;
      this.AppointmentInfo.AppointmentName = (event.target as HTMLInputElement).value;
-     this.AppointmentInfo.AppointmentDate = this.dp.transform(this.Bookingform.get('AppointmentDate')?.value as string,"yyyy-MM-dd") as string;
+     this.AppointmentInfo.AppointmentDate = this.dp.transform(this.Bookingform.get('AppointmentDate')?.value as string,"M/d/yyyy") as string;
      this.AppointmentInfo.AppointmentTime = this.dp.transform(this.Bookingform.get('AppointmentTime')?.value as string,"HH:mm") as string;
       var selectedAppointment:AppointmentTypeData = this.apmnt.AvailableAppointments[this.apmnt.AvailableAppointments.findIndex(a =>a.AppointmentName 
        === this.AppointmentInfo.AppointmentName)];
@@ -83,10 +82,9 @@ export class AppointmentFormComponent {
       this.AppointmentInfo.ClientLastName = this.Bookingform.get('ClientLastName')?.value as string;
       this.AppointmentInfo.ClientEmail = this.Bookingform.get('ClientEmail')?.value as string;
       this.AppointmentInfo.ClientPhone = this.Bookingform.get('ClientPhone')?.value as string;
-      this.apmnt.CreateAppointment(this.AppointmentInfo).subscribe((res)=>{
-        console.log(res);
-      });
-      this.apmnt.OnBlankSlotSelected.next(false);
-      }
+        this.apmnt.CreateAppointment(this.AppointmentInfo).subscribe((res)=>{
+          console.log(res);
+        });this.apmnt.OnBlankSlotSelected.next(false);
+        }
   }
 }
