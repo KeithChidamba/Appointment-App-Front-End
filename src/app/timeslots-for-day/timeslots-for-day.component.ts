@@ -26,7 +26,6 @@ export class TimeslotsForDayComponent {
   Timeslots:Timeslot[]=[];
   AppointmentToReSchedule:Appointment = new Appointment(0,"","","","","","","",0,"",0,0,0);
   ngOnInit(){
-    this.apmnt.OnAppointmentReSchedule.subscribe((a)=>{this.AppointmentToReSchedule=a});
       this.Timeslots=this.WeekDays[this.CurrentWeekIndex].TimeSlots;
       this.apmnt.OnUpdateViewIndex.subscribe((index)=>{
         if(this.isDailyViewMode){this.CurrentWeekIndex = index;}
@@ -35,21 +34,25 @@ export class TimeslotsForDayComponent {
   }
   
    BookAppointment( BlankSlot:Timeslot){
-    if(this.auth.loggedIn())return;
     if(this.apmnt.isRescheduling){
+      this.AppointmentToReSchedule = this.apmnt.AppointmentToReSchedule;
       if(this.apmnt.ValidSlotLength(BlankSlot,this.AppointmentToReSchedule.AppointmentDurationInMinutes))
         {
           this.AppointmentToReSchedule.AppointmentTime = BlankSlot.StartTime;
           this.AppointmentToReSchedule.AppointmentDate = BlankSlot.dateOfSlot;
-          this.apmnt.isRescheduling = false;
+          BlankSlot.CurrentAppointment = this.AppointmentToReSchedule;
+          this.apmnt.RecieveAppointment(BlankSlot);
+          this.apmnt.OnAppointmentSelected.next(true);
+          this.router.navigate(['/AppointmentInfo']);
           return;
-        }{
+        }else{
           console.log("invalid timeslot for appointment")
           return;
         }
     }
+    if(this.auth.loggedIn())return;
     this.apmnt.OnBlankSlotSelected.next(true);
-    this.apmnt.RecieveAppointmentToBook(BlankSlot);
+    this.apmnt.RecieveAppointment(BlankSlot);
     this.router.navigate(['/AppointmentForm']);
  }
  EditAppointment(AppointmentSlot:Timeslot)
@@ -57,7 +60,7 @@ export class TimeslotsForDayComponent {
   if(!this.auth.loggedIn())return;  
   if(this.apmnt.isRescheduling)return;
   this.apmnt.OnAppointmentSelected.next(true);
-  this.apmnt.RecieveAppointmentToBook(AppointmentSlot);
+  this.apmnt.RecieveAppointment(AppointmentSlot);
   this.router.navigate(['/AppointmentInfo']);
 }
 }

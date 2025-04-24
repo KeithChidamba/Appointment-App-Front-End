@@ -6,6 +6,8 @@ import { NavigationIndex } from '../models/NavigationIndex';
 import { DatePipe } from '@angular/common';
 import { Timeslot } from '../models/Timeslot';
 import { AuthService } from '../services/auth.service';
+import {NavigationStart, Router} from '@angular/router';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-appointments-timetable',
@@ -13,7 +15,7 @@ import { AuthService } from '../services/auth.service';
   styleUrls: ['./appointments-timetable.component.css']
 })
 export class AppointmentsTimetableComponent {
-constructor(private apmt: AppointmentService, public dp:DatePipe, private auth:AuthService){}
+constructor(private apmt: AppointmentService, public dp:DatePipe, private auth:AuthService, private router:Router){}
 NumberOfDaysToShow:number = 7;
 ScheduledAppointments: Appointment[]=[];
 WeekDays:WeekDaySchedule[]=[new WeekDaySchedule(true),new WeekDaySchedule(true),new WeekDaySchedule(true),
@@ -38,19 +40,27 @@ HeaderWidthStyle:string='';
 HeadingWidthStyle:string='';
 TimeslotSeperatorStyle:string='';
 TimeSlotsMargin:string='';
+private routerSubscription!: Subscription;
 
 ngOnInit() {
+  this.routerSubscription = this.router.events.subscribe(event => {
+    if (event instanceof NavigationStart) {
+      if(event.url !=="/AppointmentsTimetable" && event.url !=="/AppointmentInfo")
+        {
+          this.apmt.isRescheduling = false;
+          console.log('Route is changing, variable set to false');
+        }
+    }
+  });
   if(this.auth.loggedIn()){
     this.apmt.GetAppointmentsForBusiness().subscribe(
       (data)=>{
-        
-        this.ScheduledAppointments = data; console.log(this.ScheduledAppointments); this.LoadWeeklyTable(new Date(),true);
+        this.ScheduledAppointments = data; this.LoadWeeklyTable(new Date(),true);
     });
   }else{
     this.apmt.GetAppointmentsForClients().subscribe(
       (data)=>{
-
-        this.ScheduledAppointments = data; console.log(this.ScheduledAppointments); this.LoadWeeklyTable(new Date(),true);
+        this.ScheduledAppointments = data; this.LoadWeeklyTable(new Date(),true);
     });
   }
 

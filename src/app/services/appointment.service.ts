@@ -18,7 +18,7 @@ export class AppointmentService {
   public OnUpdateViewIndex: Subject<number> = new Subject<number>();
   public OnAppointmentSelected: Subject<boolean> = new Subject<boolean>();
   public OnBlankSlotSelected: Subject<boolean> = new Subject<boolean>();
-  public OnAppointmentReSchedule: Subject<Appointment> = new Subject<Appointment>();
+  public AppointmentToReSchedule:Appointment = new Appointment(0,"","","","","","","",0,"",0,0,0);
   public SelectedBusinessForClientView='';
   public BusinessSelected = false;
   isRescheduling = false;
@@ -28,14 +28,13 @@ export class AppointmentService {
     public ValidSlotLength(slot:Timeslot,ApppointmentDuration:number){
       let start = this.GetNewDateFromTime(slot.StartTime);
       let end  = this.GetNewDateFromTime(slot.EndTime);
-      let minutes = end.getTime()-start.getTime();
-      if(minutes<=0){console.log("invalid times")};
-      return minutes<=ApppointmentDuration;
+      let minutes = (end.getTime()-start.getTime())/60000;
+      return minutes>=ApppointmentDuration;
     }
   public GetCurrentSlot():Timeslot{
     return this.CurrentStoredTimeslot;
   }
-  public RecieveAppointmentToBook(Slot:Timeslot){
+  public RecieveAppointment(Slot:Timeslot){
     this.CurrentStoredTimeslot=Slot;
   }
   public GetNewDateFromTime(Time: string): Date {

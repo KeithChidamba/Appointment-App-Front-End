@@ -2,8 +2,6 @@
     <span>You can the edit following fields </span>
     <form [formGroup]="Bookingform"  style="border:1px solid #ccc">
         <div>      
-              <label> Appointment Date</label>
-              <input class="InputField" [min]="EarliestDate" type="date" name="date" formControlName="AppointmentDate" required>
                 <label> Appointment Time </label>
               <input class="InputField" type="time" name="time" formControlName="AppointmentTime" required [min]="BlankSlotForBooking.StartTime" [max]="LatestBookingTime">
               <label> Appointment

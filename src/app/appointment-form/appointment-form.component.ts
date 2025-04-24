@@ -42,8 +42,7 @@ export class AppointmentFormComponent {
         Validators.required,
         Validators.pattern(/^[a-zA-Z0-9]+$/)
       ])],      
-      AppointmentTime : [''],
-      AppointmentDate : ['']
+      AppointmentTime : ['']
     });
     ngOnInit(){
       this.BlankSlotForBooking = this.apmnt.GetCurrentSlot();
@@ -52,30 +51,35 @@ export class AppointmentFormComponent {
    SetAppointmentType(event:Event){
     this.checkingValidity = true;
      this.AppointmentInfo.AppointmentName = (event.target as HTMLInputElement).value;
-     this.AppointmentInfo.AppointmentDate = this.dp.transform(this.Bookingform.get('AppointmentDate')?.value as string,"M/d/yyyy") as string;
-     this.AppointmentInfo.AppointmentTime = this.dp.transform(this.Bookingform.get('AppointmentTime')?.value as string,"HH:mm") as string;
+     this.AppointmentInfo.AppointmentDate = this.BlankSlotForBooking.dateOfSlot;
       var selectedAppointment:AppointmentTypeData = this.apmnt.AvailableAppointments[this.apmnt.AvailableAppointments.findIndex(a =>a.AppointmentName 
        === this.AppointmentInfo.AppointmentName)];
      this.AppointmentInfo.AppointmentPrice = selectedAppointment.AppointmentPrice;
      this.AppointmentInfo.AppointmentDurationInMinutes = selectedAppointment.AppointmentDurationInMinutes;
-     var SlotLengthMinutes = this.apmnt.GetNewDateFromTime(this.BlankSlotForBooking.EndTime).getTime()
-             -this.apmnt.GetNewDateFromTime(this.BlankSlotForBooking.StartTime).getTime();
-     if(this.AppointmentInfo.AppointmentDurationInMinutes > SlotLengthMinutes){
-         //cant book appointment here
-         console.log("invalid lendth for appointment: "+SlotLengthMinutes);
-         this.ValidAppointment=false;
-     }
-     else if(this.AppointmentInfo.AppointmentDurationInMinutes<SlotLengthMinutes){
-       this.LatestBookingTime = this.dp.transform(this.apmnt.GetNewDateFromTime(this.BlankSlotForBooking.EndTime)
-         .setMinutes(-this.AppointmentInfo.AppointmentDurationInMinutes),"HH:mm") as string;
-         this.ValidAppointment=true;
-     }        
-     else if(this.AppointmentInfo.AppointmentDurationInMinutes == SlotLengthMinutes){
-         this.LatestBookingTime = this.BlankSlotForBooking.StartTime;
-         this.ValidAppointment=true;
-     }
+
   }
   SaveChanges(){
+    var SlotLengthMinutes = this.apmnt.GetNewDateFromTime(this.BlankSlotForBooking.EndTime).getTime()
+    -this.apmnt.GetNewDateFromTime(this.BlankSlotForBooking.StartTime).getTime();
+    if(this.AppointmentInfo.AppointmentDurationInMinutes > SlotLengthMinutes){
+    //cant book appointment here
+    console.log("invalid lendth for appointment: "+SlotLengthMinutes);
+    this.ValidAppointment=false;
+    }
+    else if(this.AppointmentInfo.AppointmentDurationInMinutes<SlotLengthMinutes){
+      this.LatestBookingTime = this.dp.transform(this.apmnt.GetNewDateFromTime(this.BlankSlotForBooking.EndTime)
+        .setMinutes(-this.AppointmentInfo.AppointmentDurationInMinutes),"HH:mm") as string;
+        this.ValidAppointment=true;
+    }        
+    else if(this.AppointmentInfo.AppointmentDurationInMinutes == SlotLengthMinutes){
+        this.LatestBookingTime = this.BlankSlotForBooking.StartTime;
+        this.ValidAppointment=true;
+    }
+    var FormattedTimeString  = this.dp.transform(this.apmnt.GetNewDateFromTime(this.Bookingform.get('AppointmentTime')?.value as string),"HH:mm") as string;
+    var timeFromInput = this.apmnt.GetNewDateFromTime(FormattedTimeString);
+    if(this.apmnt.GetNewDateFromTime(this.LatestBookingTime).getTime() < timeFromInput.getTime() 
+    || timeFromInput.getTime() < this.apmnt.GetNewDateFromTime(this.BlankSlotForBooking.StartTime).getTime() )
+    this.AppointmentInfo.AppointmentTime = FormattedTimeString;
     if(this.Bookingform.valid && this.ValidAppointment ){
       this.AppointmentInfo.isConfirmed = 0;
       this.AppointmentInfo.ClientFirstName = this.Bookingform.get('ClientFirstName')?.value as string;

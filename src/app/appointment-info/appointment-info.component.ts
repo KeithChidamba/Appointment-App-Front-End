@@ -3,9 +3,9 @@ import { AppointmentService } from '../services/appointment.service';
 import { Timeslot } from '../models/Timeslot';
 import { DatePipe } from '@angular/common';
 import { Appointment } from '../models/Appointment';
-import { AppointmentTypeData } from '../models/AppointmentTypeInfo';
 import { Validators, FormBuilder } from '@angular/forms';
-import {Router} from '@angular/router';
+import {NavigationStart, Router} from '@angular/router';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-appointment-info',
@@ -17,40 +17,34 @@ constructor(private fb: FormBuilder,public apmnt:AppointmentService, public dp:D
 TimeslotForEditing:Timeslot = new Timeslot('','',0,'',null,0);
 AppointmentInfo:Appointment = new Appointment(0,"","","","","","","",0,"",0,0,0);
 LatestBookingTime = "21:00";
-ValidAppointment:boolean=false;
-EditingAppointment=false;
-CurrentViewText ="Edit Appointment";
+ValidAppointment=false;
+ValidatingTime=false;
+private routerSubscription!: Subscription;
 EarliestDate:string = this.dp.transform(new Date(),"yyyy-MM-dd") as string;
     Editingform = this.fb.group({
-      AppointmentTime : ['',Validators.required],
-      AppointmentDate : ['']
+      AppointmentTime : ['',Validators.required]
     });
     ngOnInit(){
+      this.ValidatingTime=this.apmnt.isRescheduling;
+      this.apmnt.isRescheduling=false;
       this.TimeslotForEditing = this.apmnt.GetCurrentSlot();
       this.AppointmentInfo = this.TimeslotForEditing.CurrentAppointment as Appointment;
+      this.routerSubscription = this.router.events.subscribe(event => {
+        if (event instanceof NavigationStart) {
+          if(event.url !=="/AppointmentsTimetable" && event.url !=="/AppointmentInfo")
+          {
+            this.apmnt.isRescheduling = false;
+            console.log('Route is changing, variable set to false');
+          }
+        }
+      });
     }
     ReScheduleAppointment(){
         this.apmnt.isRescheduling=true;
+        this.apmnt.AppointmentToReSchedule=this.AppointmentInfo;
         this.router.navigate(['/AppointmentsTimetable']);
     }
-    OpenEditView(){
-      this.EditingAppointment=!this.EditingAppointment;
-      this.CurrentViewText =(this.EditingAppointment)?"View Appointment":"Edit Appointment";
-    }
-   SetAppointmentType(event:Event){
-    if(!this.Editingform.get('AppointmentTime')?.valid || !this.Editingform.get('AppointmentDate')?.valid)return;
-    var FormattedDateString = this.dp.transform(this.Editingform.get('AppointmentDate')?.value, 'M/d/yyyy') as string;
-    var FormattedTimeString  = this.dp.transform(this.apmnt.GetNewDateFromTime(this.Editingform.get('AppointmentTime')?.value as string),"HH:mm") as string;
-    var timeFromInput = this.apmnt.GetNewDateFromTime(FormattedTimeString);
-    if(this.apmnt.GetNewDateFromTime(this.LatestBookingTime).getTime() < timeFromInput.getTime() 
-    || timeFromInput.getTime() < this.apmnt.GetNewDateFromTime(this.TimeslotForEditing.StartTime).getTime() )
-     this.AppointmentInfo.AppointmentName = (event.target as HTMLInputElement).value;
-     this.AppointmentInfo.AppointmentDate = FormattedDateString;
-     this.AppointmentInfo.AppointmentTime = FormattedTimeString;
-      var selectedAppointment:AppointmentTypeData = this.apmnt.AvailableAppointments[this.apmnt.AvailableAppointments.findIndex(a =>a.AppointmentName 
-       === this.AppointmentInfo.AppointmentName)];
-     this.AppointmentInfo.AppointmentPrice = selectedAppointment.AppointmentPrice;
-     this.AppointmentInfo.AppointmentDurationInMinutes = selectedAppointment.AppointmentDurationInMinutes;
+   ValidateAppointmentTime(){
      var SlotLengthMinutes = Math.abs(this.apmnt.GetNewDateFromTime(this.TimeslotForEditing.EndTime).getTime()
              -this.apmnt.GetNewDateFromTime(this.TimeslotForEditing.StartTime).getTime())/60000;
      if(this.AppointmentInfo.AppointmentDurationInMinutes > SlotLengthMinutes){
@@ -67,14 +61,28 @@ EarliestDate:string = this.dp.transform(new Date(),"yyyy-MM-dd") as string;
          this.LatestBookingTime = this.TimeslotForEditing.StartTime;
          this.ValidAppointment=true;
      }
+
+     var FormattedTimeString  = this.dp.transform(this.apmnt.GetNewDateFromTime(this.Editingform.get('AppointmentTime')?.value as string),"HH:mm") as string;
+
+     var timeFromInput = this.apmnt.GetNewDateFromTime(FormattedTimeString);
+     if(this.apmnt.GetNewDateFromTime(this.LatestBookingTime).getTime() < timeFromInput.getTime() 
+     || timeFromInput.getTime() < this.apmnt.GetNewDateFromTime(this.TimeslotForEditing.StartTime).getTime() )
+     {console.log("invalid time for appointment: latest:"+this.LatestBookingTime);return}
+     if(((this.apmnt.GetNewDateFromTime(this.LatestBookingTime).getTime() - timeFromInput.getTime())/60000) 
+      >=  this.AppointmentInfo.AppointmentDurationInMinutes)
+      { this.AppointmentInfo.AppointmentTime = FormattedTimeString; }
+      else{this.ValidAppointment=false;}
+     if(this.ValidAppointment){this.SaveChanges();}
   }
   SaveChanges(){
       if(this.ValidAppointment)
       {
-          this.apmnt.UpdateAppointment(this.AppointmentInfo).subscribe((res)=>{
-            console.log(res);
-          });
-          this.apmnt.OnAppointmentSelected.next(false);
+        this.apmnt.UpdateAppointment(this.AppointmentInfo).subscribe((res)=>{
+          console.log(res);
+        });
+        this.apmnt.isRescheduling = false;
+        this.apmnt.OnAppointmentSelected.next(false);
       }
   }
+  
 }
