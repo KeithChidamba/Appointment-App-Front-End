@@ -1,0 +1,46 @@
+.error-block {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #ffe5e5;
+    color: #b00020;
+    border-left: 6px solid #b00020;
+    border-radius: 8px;
+    padding: 16px 20px;
+    max-width: 600px;
+    margin: 20px auto;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    position: relative;
+  }
+
+  .error-content {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .error-title {
+    font-weight: bold;
+    font-size: 18px;
+    margin-bottom: 4px;
+  }
+
+  .error-message {
+    font-size: 15px;
+    margin: 0;
+  }
+
+  .close-btn {
+    background: none;
+    border: none;
+    font-size: 20px;
+    color: #b00020;
+    cursor: pointer;
+    position: absolute;
+    top: 10px;
+    right: 14px;
+  }
+
+  .close-btn:hover {
+    color: #7b0016;
+  }

@@ -5,7 +5,7 @@ import { DatePipe } from '@angular/common';
 import { Appointment } from '../models/Appointment';
 import { Validators, FormBuilder } from '@angular/forms';
 import {NavigationStart, Router} from '@angular/router';
-import { Subscription } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-appointment-info',
@@ -19,7 +19,8 @@ AppointmentInfo:Appointment = new Appointment(0,"","","","","","","",0,"",0,0,0)
 LatestBookingTime = "21:00";
 ValidAppointment=false;
 ValidatingTime=false;
-private routerSubscription!: Subscription;
+routerSubscription!: Subscription;
+OnNewError:Subject<string> = new Subject<string>();
 EarliestDate:string = this.dp.transform(new Date(),"yyyy-MM-dd") as string;
     Editingform = this.fb.group({
       AppointmentTime : ['',Validators.required]
@@ -34,7 +35,6 @@ EarliestDate:string = this.dp.transform(new Date(),"yyyy-MM-dd") as string;
           if(event.url !=="/AppointmentsTimetable" && event.url !=="/AppointmentInfo")
           {
             this.apmnt.isRescheduling = false;
-            console.log('Route is changing, variable set to false');
           }
         }
       });
@@ -49,7 +49,7 @@ EarliestDate:string = this.dp.transform(new Date(),"yyyy-MM-dd") as string;
              -this.apmnt.GetNewDateFromTime(this.TimeslotForEditing.StartTime).getTime())/60000;
      if(this.AppointmentInfo.AppointmentDurationInMinutes > SlotLengthMinutes){
          //cant book appointment here
-         console.log("invalid lendth for appointment: "+SlotLengthMinutes);
+         this.OnNewError.next("The selected appointment type is too long for this time slot");
          this.ValidAppointment=false;
      }
      else if(this.AppointmentInfo.AppointmentDurationInMinutes<SlotLengthMinutes){
@@ -65,13 +65,19 @@ EarliestDate:string = this.dp.transform(new Date(),"yyyy-MM-dd") as string;
      var FormattedTimeString  = this.dp.transform(this.apmnt.GetNewDateFromTime(this.Editingform.get('AppointmentTime')?.value as string),"HH:mm") as string;
 
      var timeFromInput = this.apmnt.GetNewDateFromTime(FormattedTimeString);
-     if(this.apmnt.GetNewDateFromTime(this.LatestBookingTime).getTime() < timeFromInput.getTime() 
-     || timeFromInput.getTime() < this.apmnt.GetNewDateFromTime(this.TimeslotForEditing.StartTime).getTime() )
-     {console.log("invalid time for appointment: latest:"+this.LatestBookingTime);return}
+     if(this.apmnt.GetNewDateFromTime(this.LatestBookingTime).getTime() < timeFromInput.getTime()){
+      this.OnNewError.next("The selected appointment time later than the selected time slot");return;
+     }
+     if(timeFromInput.getTime() < this.apmnt.GetNewDateFromTime(this.TimeslotForEditing.StartTime).getTime() ){
+      this.OnNewError.next("The selected appointment time earlier than the selected time slot");return;
+     }
      if(((this.apmnt.GetNewDateFromTime(this.LatestBookingTime).getTime() - timeFromInput.getTime())/60000) 
       >=  this.AppointmentInfo.AppointmentDurationInMinutes)
       { this.AppointmentInfo.AppointmentTime = FormattedTimeString; }
-      else{this.ValidAppointment=false;}
+      else{this.ValidAppointment=false;
+        let minutes = Math.abs((timeFromInput.getTime()-this.apmnt.GetNewDateFromTime(this.TimeslotForEditing.EndTime).getTime())/60000);
+        this.OnNewError.next(`The selected appointment time must be ${minutes} minutes earlier`);return;
+      }
      if(this.ValidAppointment){this.SaveChanges();}
   }
   SaveChanges(){

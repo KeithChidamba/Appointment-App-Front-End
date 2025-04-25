@@ -10,7 +10,7 @@ const routes: Routes = [
   { path: 'login', loadChildren: () => import('./login/login.module').then(m => m.LoginModule)},
   { path: 'Profile', loadChildren: () => import('./profile/profile.module').then(m => m.ProfileModule),canActivate: [AuthGuard] },
   { path: 'AppointmentsTimetable', loadChildren: () => import('./appointments-timetable/appointments-timetable.module').then(m => m.AppointmentsTimetableModule), canActivate: [TimetableViewGuard]},
-  { path: 'AppointmentForm', loadChildren: () => import('./appointment-form/appointment-form.module').then(m => m.AppointmentFormModule), canActivate: [AuthGuard,AppointmentBookingGuard]},
+  { path: 'AppointmentForm', loadChildren: () => import('./appointment-form/appointment-form.module').then(m => m.AppointmentFormModule), canActivate: [AppointmentBookingGuard]},
   { path: 'AppointmentInfo', loadChildren: () => import('./appointment-info/appointment-info.module').then(m => m.AppointmentInfoModule), canActivate: [AuthGuard,AppointmentEditGuard]},
   {
     path: '',
@@ -20,7 +20,7 @@ const routes: Routes = [
   },
   {
     path: '**',
-    redirectTo: '', // send unknown routes to the default route
+    redirectTo: '',
   }
   ];
 

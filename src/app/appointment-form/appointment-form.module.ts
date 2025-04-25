@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { AppointmentFormRoutingModule } from './appointment-form-routing.module';
 import { AppointmentFormComponent } from './appointment-form.component';
+import { ErrorDisplayComponent } from '../error-display/error-display.component';
 
 
 @NgModule({
@@ -11,7 +12,7 @@ import { AppointmentFormComponent } from './appointment-form.component';
   ],
   imports: [
     CommonModule,
-    AppointmentFormRoutingModule,ReactiveFormsModule
+    AppointmentFormRoutingModule,ReactiveFormsModule,ErrorDisplayComponent
   ]
 })
 export class AppointmentFormModule { }

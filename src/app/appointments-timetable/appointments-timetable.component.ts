@@ -45,7 +45,7 @@ private routerSubscription!: Subscription;
 ngOnInit() {
   this.routerSubscription = this.router.events.subscribe(event => {
     if (event instanceof NavigationStart) {
-      if(event.url !=="/AppointmentsTimetable" && event.url !=="/AppointmentInfo")
+      if(event.url !=="/AppointmentsTimetable" && event.url !=="/AppointmentInfo" && this.apmt.isRescheduling)
         {
           this.apmt.isRescheduling = false;
           console.log('Route is changing, variable set to false');
