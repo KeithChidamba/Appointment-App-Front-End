@@ -5,6 +5,7 @@ import { RegisterRoutingModule } from './register-routing.module';
 import { RegisterComponent } from './register.component';
 import { AuthService } from '../services/auth.service';
 import { HttpClientModule} from "@angular/common/http";
+import { ErrorDisplayComponent } from '../error-display/error-display.component';
 
 
 @NgModule({
@@ -13,7 +14,7 @@ import { HttpClientModule} from "@angular/common/http";
   ],
   imports: [
     CommonModule,
-    RegisterRoutingModule,ReactiveFormsModule,FormsModule,HttpClientModule
+    RegisterRoutingModule,ReactiveFormsModule,FormsModule,HttpClientModule,ErrorDisplayComponent
   ]
 })
 export class RegisterModule { }

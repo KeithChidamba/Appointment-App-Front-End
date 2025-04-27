@@ -4,6 +4,7 @@ import { AuthService } from "../services/auth.service";
 import { Router } from 'node_modules/@angular/router';
 import { Business } from '../models/Business';
 import { AppointmentService } from '../services/appointment.service';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-register',
@@ -15,10 +16,8 @@ import { AppointmentService } from '../services/appointment.service';
 })
 export class RegisterComponent {
   constructor(private apmt: AppointmentService,private fb: FormBuilder,public auth:AuthService,private router:Router) { } 
-  errorAlert='';
   checkingValidity =false;
-  err = false;
-  success = false;
+    OnNewError:Subject<string> = new Subject<string>();
   BusinessOwner:Business={
     BusinessID:0,
     OwnerEmail: ' ',
@@ -79,13 +78,10 @@ export class RegisterComponent {
         this.auth.register(this.BusinessOwner).subscribe(
           (data)=>{
             this.apmt.BusinessSelected=true;
-            this.err = false;
-            this.success=true;
             this.router.navigate(['/Profile'])
           },
           (error)=>{
-              this.err = true;
-              this.errorAlert = error;
+            this.OnNewError.next(error)
           }
         )
         };

@@ -12,8 +12,8 @@ import { AppointmentTypeData } from '../models/AppointmentTypeInfo';
 export class AppointmentService {
 
   constructor(public http:HttpClient, private auth:AuthService) { }
-  //domain = "https://nail-appointment-backend-production.up.railway.app";
-  domain = "http://localhost:8080";
+  domain = "https://nail-appointment-backend-production.up.railway.app";
+  //domain = "http://localhost:8080";
   CurrentStoredTimeslot:Timeslot = new Timeslot('','',0,'',null,0);
   public OnUpdateViewIndex: Subject<number> = new Subject<number>();
   public OnAppointmentSelected: Subject<boolean> = new Subject<boolean>();
@@ -50,14 +50,12 @@ export class AppointmentService {
     )
   }
   CreateAppointment(NewAppointment:Appointment){
-    const headers = this.auth.createAuthenticationHeaders();
-    return this.http.post<Appointment>(this.domain+'/api/appointments/add',NewAppointment,{headers}).pipe(  
+    return this.http.post<Appointment>(this.domain+'/api/appointments/add',NewAppointment).pipe(  
       catchError(this.handleError)
     )
   }
   GetAppointmentsForClients():Observable<Appointment[]>{
-    const headers = this.auth.createAuthenticationHeaders();
-    return this.http.get<Appointment[]>(this.domain+`/api/appointments/GetForClientView/${this.SelectedBusinessForClientView}`,{headers}).pipe(  
+    return this.http.get<Appointment[]>(this.domain+`/api/appointments/GetForClientView/${this.SelectedBusinessForClientView}`).pipe(  
                 catchError(this.handleError)
               )
   }

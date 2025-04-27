@@ -3,6 +3,7 @@ import { Validators,FormBuilder } from "node_modules/@angular/forms";
 import { AuthService } from "../services/auth.service";
 import { LoginData }from '../interfaces/LoginData';
 import { AppointmentService } from '../services/appointment.service';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -12,10 +13,8 @@ import { AppointmentService } from '../services/appointment.service';
 export class LoginComponent {
 
   constructor(private apmt: AppointmentService,private fb: FormBuilder,public auth:AuthService) { } 
-  err = false;
-  success = false;
   checkingValidity =false;
-  errorAlert='';
+  OnNewError:Subject<string> = new Subject<string>();
   BusinessOwner:LoginData={
       BusinessName: '',
       OwnerPassword:''
@@ -55,13 +54,9 @@ export class LoginComponent {
             this.auth.loggedIn();
             this.apmt.BusinessSelected=true;
             this.auth.GetBusinessData();
-            this.success = true;
-            this.err = false;
           },
           (error)=>{
-              this.err = true;
-              this.errorAlert = error;
-
+              this.OnNewError.next(error)
           }
         )
       }

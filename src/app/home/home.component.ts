@@ -9,11 +9,12 @@ import { AppointmentService } from '../services/appointment.service';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent {
-  constructor(private apmt:AppointmentService,private auth:AuthService){}
+  constructor(private apmt:AppointmentService,private auth:AuthService,public router:Router){}
   Businessname='';
 
   SearchForBusiness(){
     this.apmt.SelectedBusinessForClientView = this.Businessname;
     this.apmt.BusinessSelected = true;
+    this.router.navigate(['/AppointmentsTimetable']);
   }
 }

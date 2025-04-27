@@ -13,8 +13,8 @@ import { Router } from 'node_modules/@angular/router';
 export class AuthService {
   constructor(public http:HttpClient,public dp:DatePipe,private router:Router) { }
   private helper = new JwtHelperService();
-  //private domain = "https://nail-appointment-backend-production.up.railway.app";
-  private domain = "http://localhost:8080";
+  private domain = "https://nail-appointment-backend-production.up.railway.app";
+  //private domain = "http://localhost:8080";
   public isLoggedIn = false;
   private authToken:string ='';
   public BusinessData:Business=new Business(0,' ','','', '','','' );

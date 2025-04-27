@@ -85,6 +85,9 @@ EarliestDate:string = this.dp.transform(new Date(),"yyyy-MM-dd") as string;
       {
         this.apmnt.UpdateAppointment(this.AppointmentInfo).subscribe((res)=>{
           console.log(res);
+        },
+        (error)=>{
+            this.OnNewError.next(error)
         });
         this.apmnt.isRescheduling = false;
         this.apmnt.OnAppointmentSelected.next(false);

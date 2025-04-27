@@ -1,7 +1,6 @@
 
 <form [formGroup]="Loginform"  style="border:1px solid #ccc">
-	<div *ngIf="err" class="error">{{errorAlert}}</div>
-
+	<app-error-display [OnNewError]="OnNewError"></app-error-display>
     <div class="container"  align="center">
       <h1>Login</h1>
        <!--username-->

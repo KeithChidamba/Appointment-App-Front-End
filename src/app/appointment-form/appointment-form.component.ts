@@ -44,7 +44,8 @@ export class AppointmentFormComponent {
         Validators.required,
         Validators.pattern(/^[a-zA-Z0-9]+$/)
       ])],      
-      AppointmentTime : ['']
+      AppointmentTime : ['',Validators.compose([
+        Validators.required])]
     });
     ngOnInit(){
       this.BlankSlotForBooking = this.apmnt.GetCurrentSlot();
@@ -58,13 +59,13 @@ export class AppointmentFormComponent {
        === this.AppointmentInfo.AppointmentName)];
      this.AppointmentInfo.AppointmentPrice = selectedAppointment.AppointmentPrice;
      this.AppointmentInfo.AppointmentDurationInMinutes = selectedAppointment.AppointmentDurationInMinutes;
-
   }
   SaveChanges(){
+    if(!this.checkingValidity){this.OnNewError.next("The please select a valid appointment");return;}
+    if(!this.Bookingform.valid){this.OnNewError.next("Please corrrect your details");return;}
     var SlotLengthMinutes = Math.abs(this.apmnt.GetNewDateFromTime(this.BlankSlotForBooking.EndTime).getTime()
     -this.apmnt.GetNewDateFromTime(this.BlankSlotForBooking.StartTime).getTime())/60000;
     if(this.AppointmentInfo.AppointmentDurationInMinutes > SlotLengthMinutes){
-    //cant book appointment here
     this.OnNewError.next("The selected appointment type is too long for this time slot");
     this.ValidAppointment=false;
     }
@@ -79,20 +80,19 @@ export class AppointmentFormComponent {
     }
 
     var FormattedTimeString  = this.dp.transform(this.apmnt.GetNewDateFromTime(this.Bookingform.get('AppointmentTime')?.value as string),"HH:mm") as string;
-
     var timeFromInput = this.apmnt.GetNewDateFromTime(FormattedTimeString);
-    if(this.apmnt.GetNewDateFromTime(this.LatestBookingTime).getTime() < timeFromInput.getTime()){
+    var BookingTimeOverflow = Math.trunc((this.apmnt.GetNewDateFromTime(this.LatestBookingTime).getTime() - timeFromInput.getTime())/60000);
+    if(this.apmnt.GetNewDateFromTime(this.BlankSlotForBooking.EndTime ).getTime() < timeFromInput.getTime()){
     this.OnNewError.next("The selected appointment time later than the selected time slot");return;
     }
     if(timeFromInput.getTime() < this.apmnt.GetNewDateFromTime(this.BlankSlotForBooking.StartTime).getTime() ){
     this.OnNewError.next("The selected appointment time earlier than the selected time slot");return;
     }
-    if(((this.apmnt.GetNewDateFromTime(this.LatestBookingTime).getTime() - timeFromInput.getTime())/60000) 
-    >=  this.AppointmentInfo.AppointmentDurationInMinutes)
+    if(BookingTimeOverflow<=0)
     { this.AppointmentInfo.AppointmentTime = FormattedTimeString; }
-    else{this.ValidAppointment=false;
-    let minutes = Math.abs((timeFromInput.getTime()-this.apmnt.GetNewDateFromTime(this.BlankSlotForBooking.EndTime).getTime())/60000);
-    this.OnNewError.next(`The selected appointment time must be ${minutes} minutes earlier`);return;
+    else{
+      this.ValidAppointment=false;
+      this.OnNewError.next(`The selected appointment time must be ${BookingTimeOverflow} minutes earlier`);return;
     }
     if(this.Bookingform.valid && this.ValidAppointment ){
       this.AppointmentInfo.isConfirmed = 0;
@@ -102,7 +102,11 @@ export class AppointmentFormComponent {
       this.AppointmentInfo.ClientPhone = this.Bookingform.get('ClientPhone')?.value as string;
         this.apmnt.CreateAppointment(this.AppointmentInfo).subscribe((res)=>{
           console.log(res);
-        });this.apmnt.OnBlankSlotSelected.next(false);
-        }
+        },
+        (error)=>{
+            this.OnNewError.next(error)
+        });
+        this.apmnt.OnBlankSlotSelected.next(false);
+    }
   }
 }

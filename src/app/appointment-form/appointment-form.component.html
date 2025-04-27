@@ -1,20 +1,15 @@
 <app-error-display [OnNewError]="OnNewError"></app-error-display>
 
 <div class="form-wrapper">
-  <span class="info-text">You can edit the following fields:</span>
+  <span class="info-text">Please fill out your details</span>
   <form [formGroup]="Bookingform" class="booking-form">
     
     <div class="form-group">
       <label>Appointment Time</label>
       <input class="InputField" type="time" formControlName="AppointmentTime" required [min]="BlankSlotForBooking.StartTime" [max]="LatestBookingTime">
-    </div>
-
-    <div class="form-group">
-      <label>Appointment</label>
-      <select (change)="SetAppointmentType($event)">
-        <option>-- Select --</option>
-        <option *ngFor="let a of apmnt.AvailableAppointments" [value]="a.AppointmentName">{{ a.AppointmentName }}</option>
-      </select>
+      <div class="alert" *ngIf="checkingValidity">
+        <div *ngIf="Bookingform.controls.AppointmentTime.errors?.['required']">This field is required</div>
+      </div>
     </div>
 
     <div class="form-group">
@@ -49,7 +44,6 @@
         <div *ngIf="Bookingform.controls.ClientLastName.errors?.['maxlength']">Must be shorter than 35 characters</div>
       </div>
     </div>
-
     <div class="form-group">
       <label><b>Phone</b></label>
       <input class="InputField" type="text" placeholder="Enter Phone Number" formControlName="ClientPhone" required>
@@ -59,6 +53,14 @@
       </div>
     </div>
 
+    <div class="form-group">
+      <label>Appointment</label>
+      <select (change)="SetAppointmentType($event)" >
+        <option value="" disabled selected hidden>-- Select --</option>
+        <option *ngFor="let a of apmnt.AvailableAppointments" [value]="a.AppointmentName">{{ a.AppointmentName }}</option>
+      </select>
+    </div>
+    
     <div class="form-buttons">
       <button type="button" class="cancelbtn" routerLink="/AppointmentsTimetable">Cancel</button>
       <button class="signupbtn" (click)="SaveChanges()">Save</button>

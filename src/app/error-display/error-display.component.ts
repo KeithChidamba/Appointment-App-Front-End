@@ -15,12 +15,14 @@ export class ErrorDisplayComponent {
   @Input()  OnNewError:Subject<string> = new Subject<string>();
   CurrentErrorMessage = '';
   DisplayingError = false;
+
   ngOnInit(){
     this.OnNewError.subscribe((message)=>{
       this.CurrentErrorMessage = message;
       this.DisplayingError = true;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
       setTimeout(() => {
-        this.DisplayingError = false;
+        this.DisplayingError = false
       }, 8000);
     })
   }
