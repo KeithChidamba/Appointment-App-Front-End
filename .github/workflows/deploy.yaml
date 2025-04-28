@@ -19,7 +19,7 @@ jobs:
           node-version: '22.14.0' # or whatever Node version your Angular 15 project uses
 
       - name: Install dependencies
-        run: npm install
+        run: npm install --force
 
       - name: Build Angular App
         run: npm run build -- --base-href /Appointment-App-Front-End/
