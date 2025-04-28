@@ -1,32 +1,34 @@
-name: Deploy Angular App to GitHub Pages
+name: Build and Deploy Angular App to Another Branch
 
 on:
   push:
     branches:
-      - main  # or 'master', depending on your repo
+      - main  # or your working branch
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Repository
+      - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '22.14.0' # or whatever Node version your Angular 15 project uses
+          node-version: '22.14.0' # or whatever version your Angular 15 app needs
 
-      - name: Install Dependencies
+      - name: Install dependencies
         run: npm install
 
       - name: Build Angular App
         run: npm run build -- --base-href /Appointment-App-Front-End/
-        # Replace <your-repo-name> with your GitHub repo name
+        # replace <your-repo-name> with your actual repo name
 
-      - name: Deploy to GitHub Pages
+      - name: Deploy build to custom branch
         uses: JamesIves/github-pages-deploy-action@v4
         with:
-          branch: gh-pages   # The branch the action deploys to.
-          folder: dist/Appointment-App-Front-End # Build output directory
+          branch: build  # <-- your custom branch name here!
+          folder: dist/Appointent-App # The Angular output folder
+          clean: true   # Optional: clear old files on the branch
+
