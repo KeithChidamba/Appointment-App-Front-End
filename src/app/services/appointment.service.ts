@@ -6,12 +6,13 @@ import { Business } from '../models/Business';
 import { AuthService } from './auth.service';
 import { Timeslot } from '../models/Timeslot';
 import { AppointmentTypeData } from '../models/AppointmentTypeInfo';
+import { DatePipe } from '@angular/common';
 @Injectable({
   providedIn: 'root'
 })
 export class AppointmentService {
 
-  constructor(public http:HttpClient, private auth:AuthService) { }
+  constructor(public http:HttpClient, private auth:AuthService,public dp:DatePipe) { }
   domain = "https://nail-appointment-backend-production.up.railway.app";
   //domain = "http://localhost:8080";
   CurrentStoredTimeslot:Timeslot = new Timeslot('','',0,'',null,0);
@@ -22,7 +23,7 @@ export class AppointmentService {
   public SelectedBusinessForClientView='';
   public BusinessSelected = false;
   isRescheduling = false;
-  AvailableAppointments:AppointmentTypeData[]=[new AppointmentTypeData("Gel",45,120),
+  AvailableAppointments:AppointmentTypeData[]=[new AppointmentTypeData("Gel",45,120),//temporary
     new AppointmentTypeData("Manicure" ,60,200),
     new AppointmentTypeData("Pedicure",55,300) ];
     public ValidSlotLength(slot:Timeslot,ApppointmentDuration:number){
@@ -30,6 +31,42 @@ export class AppointmentService {
       let end  = this.GetNewDateFromTime(slot.EndTime);
       let minutes = (end.getTime()-start.getTime())/60000;
       return minutes>=ApppointmentDuration;
+    }
+    public IsValidAppointment(SelectedSlot:Timeslot,OnNewError:Subject<string>,AppointmentInfo:Appointment,FormattedTimeString:string):boolean{
+      var ValidAppointment = false;
+      var LatestBookingTime = "21:00";
+      var SlotLengthMinutes = Math.abs(this.GetNewDateFromTime(SelectedSlot.EndTime).getTime()
+      -this.GetNewDateFromTime(SelectedSlot.StartTime).getTime())/60000;
+
+      if(AppointmentInfo.AppointmentDurationInMinutes > SlotLengthMinutes){
+      OnNewError.next("The selected appointment type is too long for this time slot");
+      ValidAppointment=false;
+      }
+      else if(AppointmentInfo.AppointmentDurationInMinutes<SlotLengthMinutes){
+      LatestBookingTime = this.dp.transform(this.GetNewDateFromTime(SelectedSlot.EndTime)
+      .setMinutes(-AppointmentInfo.AppointmentDurationInMinutes),"HH:mm") as string;
+      ValidAppointment=true;
+      }        
+      else if(AppointmentInfo.AppointmentDurationInMinutes == SlotLengthMinutes){
+      LatestBookingTime = SelectedSlot.StartTime;
+      ValidAppointment=true;
+      }
+  
+      var timeFromInput = this.GetNewDateFromTime(FormattedTimeString);
+      var BookingTimeOverflow = Math.trunc((this.GetNewDateFromTime(LatestBookingTime).getTime() - timeFromInput.getTime())/60000);
+      if(this.GetNewDateFromTime(SelectedSlot.EndTime ).getTime() < timeFromInput.getTime()){
+      OnNewError.next("The selected appointment time later than the selected time slot");return false;
+      }
+      if(timeFromInput.getTime() < this.GetNewDateFromTime(SelectedSlot.StartTime).getTime() ){
+      OnNewError.next("The selected appointment time earlier than the selected time slot");return false;
+      }
+      if(BookingTimeOverflow<=0)
+      { AppointmentInfo.AppointmentTime = FormattedTimeString; }
+      else{
+        ValidAppointment=false;
+        OnNewError.next(`The selected appointment time must be ${BookingTimeOverflow} minutes earlier`);return false;
+      }
+      return ValidAppointment;
     }
   public GetCurrentSlot():Timeslot{
     return this.CurrentStoredTimeslot;
@@ -66,11 +103,7 @@ export class AppointmentService {
               )
   }
       private handleError(error: HttpErrorResponse) {
-        if (error.status==400){
-          console.error("invalid business data");
-        }
-          console.error(
-            `Backend returned code ${error.status}, body was: `, error.error);
+        console.error(error.message);
         return throwError(() => new Error(error.error));
       }
 }

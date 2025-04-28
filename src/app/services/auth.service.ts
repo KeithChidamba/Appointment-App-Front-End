@@ -73,34 +73,7 @@ GetBusinessData(){
       return  (tokenDate instanceof Date)? this.isLoggedIn = tokenDate > currentDate : false;
     }
     private handleError(error: HttpErrorResponse) {
-      if (error.status==426){
-
-        console.error('no token',error.error);
-      }
-      if (error.status==427){
-
-        console.error('token invalid',error.error);
-      }
-      if (error.status==400){
-        console.error("login error");
-      }
-      if (error.status==0){
-        console.error('An error occurred:header already sent to client', error.error);
-      }
-      if (error.status==421){
-
-        console.error('Username not Found',error.error);
-      }
-      if (error.status==423){
-
-        console.error('Password Invalid',error.error);
-      }
-      if (error.status==422){
-
-        console.error('USER EXISTS!', error.error);
-      }
-        console.error(
-          `Backend returned code ${error.status}, body was: `, error.error);
+      console.error(error.message);
       return throwError(() => new Error(error.error));
     }
 }

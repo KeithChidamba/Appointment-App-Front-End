@@ -1,12 +1,12 @@
 <app-error-display [OnNewError]="OnNewError"></app-error-display>
 <div class="appointment-container">
-    <h1>{{ AppointmentInfo.AppointmentName }} Appointment for {{ AppointmentInfo.ClientFirstName }} {{ AppointmentInfo.ClientLastName }}</h1>
-    <div class="appointment-details">
-      <p><strong>Duration:</strong> {{ AppointmentInfo.AppointmentDurationInMinutes }} minutes</p>
-      <p><strong>Time:</strong> {{ AppointmentInfo.AppointmentTime }}</p>
-      <p><strong>Date:</strong> {{ AppointmentInfo.AppointmentDate }}</p>
-    </div>
+  <h1>{{ AppointmentInfo.AppointmentName }} Appointment for {{ AppointmentInfo.ClientFirstName }} {{ AppointmentInfo.ClientLastName }}</h1>
+  <div class="appointment-details">
+    <p><strong>Duration:</strong> {{ AppointmentInfo.AppointmentDurationInMinutes }} minutes</p>
+    <p><strong>Time:</strong> {{ AppointmentInfo.AppointmentTime }}</p>
+    <p><strong>Date:</strong> {{ AppointmentInfo.AppointmentDate }}</p>
   </div>
+</div>
   <button class="toggle-edit-btn" (click)="ReScheduleAppointment()" *ngIf="!ValidatingTime">Re-schedule</button>
   
   <div class="edit-form-container" *ngIf="ValidatingTime">

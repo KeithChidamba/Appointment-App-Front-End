@@ -45,40 +45,9 @@ EarliestDate:string = this.dp.transform(new Date(),"yyyy-MM-dd") as string;
         this.router.navigate(['/AppointmentsTimetable']);
     }
    ValidateAppointmentTime(){
-     var SlotLengthMinutes = Math.abs(this.apmnt.GetNewDateFromTime(this.TimeslotForEditing.EndTime).getTime()
-             -this.apmnt.GetNewDateFromTime(this.TimeslotForEditing.StartTime).getTime())/60000;
-     if(this.AppointmentInfo.AppointmentDurationInMinutes > SlotLengthMinutes){
-         //cant book appointment here
-         this.OnNewError.next("The selected appointment type is too long for this time slot");
-         this.ValidAppointment=false;
-     }
-     else if(this.AppointmentInfo.AppointmentDurationInMinutes<SlotLengthMinutes){
-       this.LatestBookingTime = this.dp.transform(this.apmnt.GetNewDateFromTime(this.TimeslotForEditing.EndTime)
-         .setMinutes(-this.AppointmentInfo.AppointmentDurationInMinutes),"HH:mm") as string;
-         this.ValidAppointment=true;
-     }        
-     else if(this.AppointmentInfo.AppointmentDurationInMinutes == SlotLengthMinutes){
-         this.LatestBookingTime = this.TimeslotForEditing.StartTime;
-         this.ValidAppointment=true;
-     }
-
-     var FormattedTimeString  = this.dp.transform(this.apmnt.GetNewDateFromTime(this.Editingform.get('AppointmentTime')?.value as string),"HH:mm") as string;
-
-     var timeFromInput = this.apmnt.GetNewDateFromTime(FormattedTimeString);
-     if(this.apmnt.GetNewDateFromTime(this.LatestBookingTime).getTime() < timeFromInput.getTime()){
-      this.OnNewError.next("The selected appointment time later than the selected time slot");return;
-     }
-     if(timeFromInput.getTime() < this.apmnt.GetNewDateFromTime(this.TimeslotForEditing.StartTime).getTime() ){
-      this.OnNewError.next("The selected appointment time earlier than the selected time slot");return;
-     }
-     if(((this.apmnt.GetNewDateFromTime(this.LatestBookingTime).getTime() - timeFromInput.getTime())/60000) 
-      >=  this.AppointmentInfo.AppointmentDurationInMinutes)
-      { this.AppointmentInfo.AppointmentTime = FormattedTimeString; }
-      else{this.ValidAppointment=false;
-        let minutes = Math.abs((timeFromInput.getTime()-this.apmnt.GetNewDateFromTime(this.TimeslotForEditing.EndTime).getTime())/60000);
-        this.OnNewError.next(`The selected appointment time must be ${minutes} minutes earlier`);return;
-      }
-     if(this.ValidAppointment){this.SaveChanges();}
+    var FormattedTimeString  = this.dp.transform(this.apmnt.GetNewDateFromTime(this.Editingform.get('AppointmentTime')?.value as string),"HH:mm") as string;
+    this.ValidAppointment = this.apmnt.IsValidAppointment(this.TimeslotForEditing,this.OnNewError,this.AppointmentInfo,FormattedTimeString);
+    if(this.ValidAppointment){this.SaveChanges();}
   }
   SaveChanges(){
       if(this.ValidAppointment)

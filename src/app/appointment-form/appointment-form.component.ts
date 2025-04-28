@@ -63,37 +63,8 @@ export class AppointmentFormComponent {
   SaveChanges(){
     if(!this.checkingValidity){this.OnNewError.next("The please select a valid appointment");return;}
     if(!this.Bookingform.valid){this.OnNewError.next("Please corrrect your details");return;}
-    var SlotLengthMinutes = Math.abs(this.apmnt.GetNewDateFromTime(this.BlankSlotForBooking.EndTime).getTime()
-    -this.apmnt.GetNewDateFromTime(this.BlankSlotForBooking.StartTime).getTime())/60000;
-    if(this.AppointmentInfo.AppointmentDurationInMinutes > SlotLengthMinutes){
-    this.OnNewError.next("The selected appointment type is too long for this time slot");
-    this.ValidAppointment=false;
-    }
-    else if(this.AppointmentInfo.AppointmentDurationInMinutes<SlotLengthMinutes){
-    this.LatestBookingTime = this.dp.transform(this.apmnt.GetNewDateFromTime(this.BlankSlotForBooking.EndTime)
-    .setMinutes(-this.AppointmentInfo.AppointmentDurationInMinutes),"HH:mm") as string;
-    this.ValidAppointment=true;
-    }        
-    else if(this.AppointmentInfo.AppointmentDurationInMinutes == SlotLengthMinutes){
-    this.LatestBookingTime = this.BlankSlotForBooking.StartTime;
-    this.ValidAppointment=true;
-    }
-
     var FormattedTimeString  = this.dp.transform(this.apmnt.GetNewDateFromTime(this.Bookingform.get('AppointmentTime')?.value as string),"HH:mm") as string;
-    var timeFromInput = this.apmnt.GetNewDateFromTime(FormattedTimeString);
-    var BookingTimeOverflow = Math.trunc((this.apmnt.GetNewDateFromTime(this.LatestBookingTime).getTime() - timeFromInput.getTime())/60000);
-    if(this.apmnt.GetNewDateFromTime(this.BlankSlotForBooking.EndTime ).getTime() < timeFromInput.getTime()){
-    this.OnNewError.next("The selected appointment time later than the selected time slot");return;
-    }
-    if(timeFromInput.getTime() < this.apmnt.GetNewDateFromTime(this.BlankSlotForBooking.StartTime).getTime() ){
-    this.OnNewError.next("The selected appointment time earlier than the selected time slot");return;
-    }
-    if(BookingTimeOverflow<=0)
-    { this.AppointmentInfo.AppointmentTime = FormattedTimeString; }
-    else{
-      this.ValidAppointment=false;
-      this.OnNewError.next(`The selected appointment time must be ${BookingTimeOverflow} minutes earlier`);return;
-    }
+    this.ValidAppointment = this.apmnt.IsValidAppointment(this.BlankSlotForBooking,this.OnNewError,this.AppointmentInfo,FormattedTimeString);
     if(this.Bookingform.valid && this.ValidAppointment ){
       this.AppointmentInfo.isConfirmed = 0;
       this.AppointmentInfo.ClientFirstName = this.Bookingform.get('ClientFirstName')?.value as string;

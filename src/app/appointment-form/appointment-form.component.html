@@ -2,6 +2,7 @@
 
 <div class="form-wrapper">
   <span class="info-text">Please fill out your details</span>
+  <span class="info-text">Time slot: {{ BlankSlotForBooking.StartTime }} -> {{ BlankSlotForBooking.EndTime }}</span>
   <form [formGroup]="Bookingform" class="booking-form">
     
     <div class="form-group">
@@ -57,7 +58,7 @@
       <label>Appointment</label>
       <select (change)="SetAppointmentType($event)" >
         <option value="" disabled selected hidden>-- Select --</option>
-        <option *ngFor="let a of apmnt.AvailableAppointments" [value]="a.AppointmentName">{{ a.AppointmentName }}</option>
+        <option *ngFor="let a of apmnt.AvailableAppointments" [value]="a.AppointmentName">{{ a.AppointmentName }} ({{ a.AppointmentDurationInMinutes }} min)</option>
       </select>
     </div>
     
