@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "Api-tester": {
+    "Appointent-App": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -13,7 +13,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/api-tester",
+            "outputPath": "dist/Appointent-App",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": [
@@ -60,10 +60,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "Api-tester:build:production"
+              "browserTarget": "Appointent-App:build:production"
             },
             "development": {
-              "browserTarget": "Api-tester:build:development"
+              "browserTarget": "Appointent-App:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -71,7 +71,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "Api-tester:build"
+            "browserTarget": "Appointent-App:build"
           }
         },
         "test": {
