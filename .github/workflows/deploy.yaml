@@ -16,7 +16,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '22.14.0' # or whatever version your Angular 15 app needs
+          node-version: '22.14.0' # or whatever Node version your Angular 15 project uses
 
       - name: Install dependencies
         run: npm install
